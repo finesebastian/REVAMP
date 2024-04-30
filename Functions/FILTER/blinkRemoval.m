@@ -27,7 +27,7 @@ classdef blinkRemoval
 
                 % Ensure no values below 0 or above size(file)
                 indexPairs(indexPairs <= 0) = 1;
-                indexPairs(indexPairs > size(outlierBooleanMatrix,1)) = size(outlierBooleanMatrix,1);
+                indexPairs(indexPairs > size(outlierBooleanMatrix,1))git push  = size(outlierBooleanMatrix,1);
 
                 % Assess Edge Conditions
                 % Blink Starts Movement Row 1 Col 2 < Row 1 Col 1
