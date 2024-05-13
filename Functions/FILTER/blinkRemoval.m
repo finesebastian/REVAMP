@@ -9,8 +9,12 @@ classdef blinkRemoval
             smoothedCombinedVertical = movmedian(combinedVertical, 50);
 
             % Evaluate if there are any outliers
+            % TF, LowerLimit, UpperLimit, Center
             % Defined by 3 Median Absolute Deviations
             outlierBooleanMatrix = isoutlier(smoothedCombinedVertical);
+
+            % Check for the Outliers if their Amplitude is >5
+            outlierBooleanMatrix(outlierBooleanMatrix) = combinedVertical(outlierBooleanMatrix)>5;
 
             % Check if Boolean Values (0 - False, 1 - True) sums are >0
             % (has Outliers) or =0 (No Outliers)
@@ -19,11 +23,26 @@ classdef blinkRemoval
                 % Create Map of Onset/Offset of Outliers
                 outlierIndex = [0;diff(outlierBooleanMatrix)];
 
+                % Create Default Data for Boundaries
+                initialBoundary = [];
+                endBoundary = [];
+
+                % Check Start Condition Outlier
+                if(outlierBooleanMatrix(1))
+                    % First Data Point in blink is 1
+                    initialBoundary = 1;
+                end
+
+                % Check End Condition Outlier
+                if(outlierBooleanMatrix(end))
+                    endBoundary = size(outlierIndex,1);
+                end
+
                 % Create Pairs of Start/End with Evaluations
                 % 1 Denotes a rise 0 -> 1 (Start) w/ 25 Sampel Buffer
-                indexPairs(:,1) = find(outlierIndex ==1) - 25;
+                indexPairs(:,1) = [initialBoundary;find(outlierIndex ==1) - 25];
                 % -1 Denotes a fall 1 -> -1 (End) w/ 25 Sample Buffer
-                indexPairs(:,2) = find(outlierIndex == -1) + 25;
+                indexPairs(:,2) = [find(outlierIndex == -1) + 25;endBoundary];
 
                 % Ensure no values below 0 or above size(file)
                 indexPairs(indexPairs <= 0) = 1;
@@ -64,12 +83,21 @@ classdef blinkRemoval
         end
 
         % Replaces blinks with NaNs then with surrounding means
-        function blinkRemovedArray = removeBlinks(tableData)
+        function [blinkRemovedArray,blinkInTransientBoolean] = removeBlinks(tableData,transientBlinkSampleThreshold)
             % Determine If Outliers Exist
             blinkIndexPairs = blinkRemoval.findBlinks(tableData);
 
+            % Set Default Boolean
+            blinkInTransientBoolean = false;
+
             % Outliers Found
             if(~isempty(blinkIndexPairs))
+                % Check First Pair for "Transient Blink Index" (Default 750) 
+                if(blinkIndexPairs(1,1) <= transientBlinkSampleThreshold)
+                    blinkInTransientBoolean = true;
+                end
+
+                % Iterate through index pairs
                 for(blinkIndex = 1:size(blinkIndexPairs,1))
                     % Fill Table Outlier Pairs with NaN
                     tableData{(blinkIndexPairs(blinkIndex,1):blinkIndexPairs(blinkIndex,2)),:} = NaN;
