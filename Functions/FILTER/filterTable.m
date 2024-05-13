@@ -3,7 +3,7 @@ classdef filterTable
     methods(Static)
 
         % Filter Table Parameter with Provided Filter Parameters
-        function filteredTable = filterTableData(tableData,filterType,filterOrder,filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary,samplingFrequency, blinkSTDThreshold, blinkTrim)
+        function filteredTable = filterTableData(tableData,filterType,filterOrder,filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary,samplingFrequency)
             % Evaluate Filter Type
             if strcmp(filterType,'bandpass')
                 % Vergence Filter
