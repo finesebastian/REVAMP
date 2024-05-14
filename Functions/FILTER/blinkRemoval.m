@@ -39,7 +39,7 @@ classdef blinkRemoval
                 end
 
                 % Create Pairs of Start/End with Evaluations
-                % 1 Denotes a rise 0 -> 1 (Start) w/ 25 Sampel Buffer
+                % 1 Denotes a rise 0 -> 1 (Start) w/ 25 Sample Buffer
                 indexPairs(:,1) = [initialBoundary;find(outlierIndex ==1) - 25];
                 % -1 Denotes a fall 1 -> -1 (End) w/ 25 Sample Buffer
                 indexPairs(:,2) = [find(outlierIndex == -1) + 25;endBoundary];
