@@ -1,0 +1,68 @@
+ 
+
+ % Select File Pathway and File(s) to Process
+ [userSelectedFilePath, userSelectedFile] = loadData.getTableData();
+  currentTableData = loadData.loadTableData(userSelectedFilePath,userSelectedFile);
+  data = extractMovementData(currentTableData);
+ 
+    Fs = 500;            % Sampling frequency                    
+    T = 1/Fs;             % Sampling period       
+    L = size(data, 1);    % Length of signal
+    t = (0:L-1)*T;        % Time vector
+
+  for window = 3:2:51
+       aggregateFFT = createFFTData(movmedian(diff(data(:, 1)), window));
+
+      for i = 2:size(data, 2)
+          aggregateFFT = aggregateFFT + createFFTData(movmedian(diff(data(:, i)), window));
+    
+      end
+    temp = figure;
+    set(temp, "Visible", "off");
+    plot(aggregateFFT,"LineWidth",1) 
+    title("Single-Sided Amplitude Spectrum of X(t)")
+    xlabel("f (Hz)")
+    ylabel("|P1(f)|")
+    save(fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("fft", string(window),".emf")), "temp");
+  
+  end
+
+
+  
+
+   
+    
+  function horizontalExtractedMovementData = extractMovementData(currentTableData)
+            
+            sectionName = "4_8_CONV_STEP";
+            % Set default values
+            horizontalExtractedMovementData = [];
+
+            % Extract Non-empty cells (cells with movement data)
+            selectedMovementData = {currentTableData.(sectionName){~cellfun(@isempty,currentTableData.(sectionName))}}';
+            
+            % Pull out streams
+            horizontalExtractedMovementData = tableDataExtractor(selectedMovementData, "Left Eye Horizontal");            
+ end
+
+function extractedTableData = tableDataExtractor(cellTableArray, extractionHeader)
+            % Determine Largest Sample Length for Plotting
+            maxSamplesList = cellfun(@max,cellfun(@size,cellTableArray,'UniformOutput',false));
+            minSamples = min(maxSamplesList);
+           
+
+            % Preallocate Space 
+            % Number of Rows based on First Cell Array Value
+            % Number of Cols based on Size of Cell Array
+            extractedTableData = nan(minSamples,size(cellTableArray,1));
+            for cellIndex = 1:size(cellTableArray,1)
+                    extractedTableData(1:minSamples,cellIndex) = cellTableArray{cellIndex}.(extractionHeader)(1:minSamples);
+            end
+end
+
+function FFTValues = createFFTData(extractedData)
+            fouriervalues = fft(extractedData);
+            tempfourier = abs(fouriervalues/(size(extractedData,1)));
+            FFTValues = tempfourier(1:(size(extractedData,1)/2)+1);
+            FFTValues(2:end-1) = 2* FFTValues(2:end-1);
+        end
