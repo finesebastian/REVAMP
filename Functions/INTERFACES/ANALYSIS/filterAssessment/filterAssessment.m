@@ -4,6 +4,7 @@
  [userSelectedFilePath, userSelectedFile] = loadData.getTableData();
   currentTableData = loadData.loadTableData(userSelectedFilePath,userSelectedFile);
   data = extractMovementData(currentTableData);
+  maxVelocities = [0];
  
     Fs = 500;            % Sampling frequency                    
     T = 1/Fs;             % Sampling period       
@@ -19,22 +20,32 @@
           sectionVelocity = sectionVelocity + movmedian(diff(data(:, i)), window);
     
       end
-    maxVelocity = max(sectionVelocity);
+    [maxVelocity, maxVelocityIndex] = max(sectionVelocity);
+    maxVelocities(end+1) = round(maxVelocity, 2);
     temp = figure;
     set(temp, "Visible", "off");
-    plot(sectionFFT,"LineWidth",1) 
+    
+    plot((Fs/(size(sectionVelocity, 1)+1)) * (0:((size(sectionVelocity, 1)))/2), sectionFFT,"LineWidth",1) 
+    ylim([0 0.04])
     title(strcat("FFT", string(window), " Single-Sided Spectrum"))
     ylabel("|P|")
+    xlabel("Frequnecy (Hz)")
     saveas(temp, fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("fft", string(window))), 'meta');
     
-    t = 1:(size(sectionVelocity))
+    t = (0:(size(sectionVelocity, 1))-1)/Fs;
     temp2 = figure;
     set(temp2, "Visible", "off");
-    plot(sectionVelocity,"LineWidth",1) 
+    plot(t, sectionVelocity,"LineWidth",1)
+    xlim([0, size(sectionVelocity, 1)/Fs])
+    ylim([-0.1 0.8])
+    hold on;
+    plot(maxVelocityIndex/Fs, maxVelocity, "*");
+    text(maxVelocityIndex/Fs + 0.2, maxVelocity - 0.01, strcat("Max = ", string(maxVelocity)));
     title(strcat("Filter Window ", string(window), " Combined Horizontal Velocity Plot"))
     ylabel("Velocity")
-    xlabel("Samples")
+    xlabel("Time (s)")
     saveas(temp2, fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("velocity", string(window))), 'meta');
+    hold off;
   
   end
 

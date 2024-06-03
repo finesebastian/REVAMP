@@ -4,6 +4,7 @@
  [userSelectedFilePath, userSelectedFile] = loadData.getTableData();
   currentTableData = loadData.loadTableData(userSelectedFilePath,userSelectedFile);
   data = extractMovementData(currentTableData);
+  maxVelocities = [0];
  
     Fs = 500;            % Sampling frequency                    
     T = 1/Fs;             % Sampling period       
@@ -11,18 +12,39 @@
     t = (0:L-1)*T;        % Time vector
 
   for window = 3:2:51
-       aggregateFFT = createFFTData(movmedian(diff(data(:, 1)), window));
+       sectionFFT = createFFTData(movmedian(diff(data(:, 1)), window));
+       sectionVelocity = movmedian(diff(data(:, 1)), window);
 
       for i = 2:size(data, 2)
-          aggregateFFT = aggregateFFT + createFFTData(movmedian(diff(data(:, i)), window));
+          sectionFFT = sectionFFT + createFFTData(movmedian(diff(data(:, i)), window));
+          sectionVelocity = sectionVelocity + movmedian(diff(data(:, i)), window);
     
       end
+    [maxVelocity, maxVelocityIndex] = max(sectionVelocity);
+    maxVelocities(end+1) = round(maxVelocity, 2);
     temp = figure;
     set(temp, "Visible", "off");
-    plot(aggregateFFT,"LineWidth",1) 
-    title(strcat("Single-Sided"))
+    ylim([0 0.04])
+    plot((Fs/(size(sectionVelocity, 1)+1)) * (0:((size(sectionVelocity, 1)))/2), sectionFFT,"LineWidth",1) 
+    title(strcat("FFT", string(window), " Single-Sided Spectrum"))
     ylabel("|P|")
+    xlabel("Frequnecy (Hz)")
     saveas(temp, fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("fft", string(window))), 'meta');
+    
+    t = (0:(size(sectionVelocity, 1))-1)/Fs;
+    temp2 = figure;
+    set(temp2, "Visible", "off");
+    xlim([0, size(sectionVelocity, 1)/Fs])
+    ylim([-0.1 0.8])
+    plot(t, sectionVelocity,"LineWidth",1)
+    hold on;
+    plot(maxVelocityIndex/Fs, maxVelocity, "*");
+    text(maxVelocityIndex/Fs + 0.2, maxVelocity - 0.01, strcat("Max = ", string(maxVelocity)));
+    title(strcat("Filter Window ", string(window), " Combined Horizontal Velocity Plot"))
+    ylabel("Velocity")
+    xlabel("Time (s)")
+    saveas(temp2, fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("velocity", string(window))), 'meta');
+    hold off;
   
   end
 
@@ -41,7 +63,7 @@
             selectedMovementData = {currentTableData.(sectionName){~cellfun(@isempty,currentTableData.(sectionName))}}';
             
             % Pull out streams
-            horizontalExtractedMovementData = tableDataExtractor(selectedMovementData, "Left Eye Horizontal");            
+            horizontalExtractedMovementData = tableDataExtractor(selectedMovementData, "Combined Horizontal");            
  end
 
 function extractedTableData = tableDataExtractor(cellTableArray, extractionHeader)

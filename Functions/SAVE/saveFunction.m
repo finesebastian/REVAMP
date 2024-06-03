@@ -6,7 +6,6 @@ classdef saveFunction
 
             % Save "importedData" variable
             save(savePath,"importedData",fileType)
-
         end
     end
 end
