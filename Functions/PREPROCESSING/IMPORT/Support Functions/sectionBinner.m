@@ -27,7 +27,7 @@ classdef sectionBinner
             movementOccurenceTable = array2table(ones(1,size(unqiueSectionHeaders,1)), ...
                 'VariableNames',unqiueSectionHeaders(:));
 
-            % Iterate through all idenitifed Index Pairs to extract data and count
+            % Iterate through all identified Index Pairs to extract data and count
             % occurences of each Section Header
             for indexPairRow = 1:size(indexPairArray)
                 % Get Row Pair (Section Header ... End Trial) Indices
