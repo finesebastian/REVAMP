@@ -87,25 +87,25 @@ classdef calculatedDataChannels
                 % Make Left Eye Sign Consistent with Right Eye Sign
                 % Left Eye (+) and Right Eye (-)
                 if(leftSign > rightSign)
-                    channelData(:,and(leftEyeIndex,~pupilIndex)) = rightSign * channelData(:,and(leftEyeIndex,~pupilIndex));
+                    channelData(:,and(rightEyeIndex,~pupilIndex)) = rightSign * channelData(:,and(rightEyeIndex,~pupilIndex));
                     % Pupil is Inverted Signs
                     % Near Response (Negative)
                     % Far Response (Positive)
-                    channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
+                    %channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
 
                 
                 % Left Eye (-) and Right Eye (+)
                 else
-                    channelData(:,and(leftEyeIndex,~pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,~pupilIndex));
+                    channelData(:,and(rightEyeIndex,~pupilIndex)) = leftSign * channelData(:,and(rightEyeIndex,~pupilIndex));
                     % Pupil is Inverted Signs
                     % Near Response (Negative)
                     % Far Response (Positive)
-                    channelData(:,and(leftEyeIndex,pupilIndex)) = rightSign * channelData(:,and(leftEyeIndex,pupilIndex));
+                    %channelData(:,and(leftEyeIndex,pupilIndex)) = rightSign * channelData(:,and(leftEyeIndex,pupilIndex));
                 end
 
                 % Evaluate Vergence Type
                 % Convergence is abs()
-                if(contains(dataEntryVariableName,'Con'))
+                if(contains(dataEntryVariableName,'Con', 'IgnoreCase',true))
                     % Left and Right Eye Consistency with Vergence Type
                     % Combined Horizontal
                     channelData(:,horizontalIndex) = abs(channelData(:,horizontalIndex));

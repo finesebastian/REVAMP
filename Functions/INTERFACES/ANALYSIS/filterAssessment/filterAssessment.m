@@ -11,19 +11,30 @@
     t = (0:L-1)*T;        % Time vector
 
   for window = 3:2:51
-       aggregateFFT = createFFTData(movmedian(diff(data(:, 1)), window));
+       sectionFFT = createFFTData(movmedian(diff(data(:, 1)), window));
+       sectionVelocity = movmedian(diff(data(:, 1)), window);
 
       for i = 2:size(data, 2)
-          aggregateFFT = aggregateFFT + createFFTData(movmedian(diff(data(:, i)), window));
+          sectionFFT = sectionFFT + createFFTData(movmedian(diff(data(:, i)), window));
+          sectionVelocity = sectionVelocity + movmedian(diff(data(:, i)), window);
     
       end
+    maxVelocity = max(sectionVelocity);
     temp = figure;
     set(temp, "Visible", "off");
-    plot(aggregateFFT,"LineWidth",1) 
-    title("Single-Sided Amplitude Spectrum of X(t)")
-    xlabel("f (Hz)")
-    ylabel("|P1(f)|")
-    save(fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("fft", string(window),".emf")), "temp");
+    plot(sectionFFT,"LineWidth",1) 
+    title(strcat("FFT", string(window), " Single-Sided Spectrum"))
+    ylabel("|P|")
+    saveas(temp, fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("fft", string(window))), 'meta');
+    
+    t = 1:(size(sectionVelocity))
+    temp2 = figure;
+    set(temp2, "Visible", "off");
+    plot(sectionVelocity,"LineWidth",1) 
+    title(strcat("Filter Window ", string(window), " Combined Horizontal Velocity Plot"))
+    ylabel("Velocity")
+    xlabel("Samples")
+    saveas(temp2, fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("velocity", string(window))), 'meta');
   
   end
 
@@ -42,7 +53,7 @@
             selectedMovementData = {currentTableData.(sectionName){~cellfun(@isempty,currentTableData.(sectionName))}}';
             
             % Pull out streams
-            horizontalExtractedMovementData = tableDataExtractor(selectedMovementData, "Left Eye Horizontal");            
+            horizontalExtractedMovementData = tableDataExtractor(selectedMovementData, "Combined Horizontal");            
  end
 
 function extractedTableData = tableDataExtractor(cellTableArray, extractionHeader)

@@ -7,25 +7,22 @@
  
     Fs = 500;            % Sampling frequency                    
     T = 1/Fs;             % Sampling period       
-    L = size(data, 1);             % Length of signal
+    L = size(data, 1);    % Length of signal
     t = (0:L-1)*T;        % Time vector
 
   for window = 3:2:51
-       aggregateFFT = createFFTData(movmedian(diff(data(:, 1)));
+       aggregateFFT = createFFTData(movmedian(diff(data(:, 1)), window));
 
       for i = 2:size(data, 2)
-          aggregateFFT = aggregateFFT + createFFTData(movmedian(diff(data(:, i), window)));
+          aggregateFFT = aggregateFFT + createFFTData(movmedian(diff(data(:, i)), window));
     
       end
     temp = figure;
-    set(temp, "Visibility", "off");
+    set(temp, "Visible", "off");
     plot(aggregateFFT,"LineWidth",1) 
-    title("Single-Sided Amplitude Spectrum of X(t)")
-    xlabel("f (Hz)")
-    ylabel("|P1(f)|")
-    saveFig(temp, fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("fft", window)));
-  
-  
+    title(strcat("Single-Sided"))
+    ylabel("|P|")
+    saveas(temp, fullfile("C:\Users\visionDeveloper\Desktop\powerAnalysisPlots", strcat("fft", string(window))), 'meta');
   
   end
 
