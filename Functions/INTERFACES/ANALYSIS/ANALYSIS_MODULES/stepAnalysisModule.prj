@@ -1,0 +1,74 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration file="C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\stepAnalysisModule.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES" name="stepAnalysisModule" target="target.mlapps" target-name="Package App">
+    <param.appname>stepAnalysisModule</param.appname>
+    <param.authnamewatermark>Sebastian Fine</param.authnamewatermark>
+    <param.email>snf5@njit.edu</param.email>
+    <param.company />
+    <param.icon />
+    <param.icons />
+    <param.summary />
+    <param.description />
+    <param.screenshot>C:\Users\VNEL-1\AppData\Local\Temp\tpf12b2c07_b90f_478d_b153_15dabd9573bd.png</param.screenshot>
+    <param.version>1.0</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>${PROJECT_ROOT}</param.output>
+    <param.guid>3ee4b590-af8c-4373-8d01-5cb378c8d566</param.guid>
+    <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.icon />
+      <param.icons />
+      <param.summary />
+      <param.description />
+      <param.version />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.output />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\stepAnalysisModule.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\LOAD\loadData.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\SAVE\saveFunction.m</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS" name="ANALYSIS_MODULES" optional="false">C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2023b</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.0</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

@@ -1,0 +1,89 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="1795446427" file="C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\MAIN\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\MAIN" name="ReVAMP" target="target.mlapps" target-name="Package App">
+    <param.appname>ReVAMP</param.appname>
+    <param.authnamewatermark>Sebastian Fine</param.authnamewatermark>
+    <param.email>snf5@njit.edu</param.email>
+    <param.company />
+    <param.icon />
+    <param.icons />
+    <param.summary>Revitalized Vergence Eye Movement Analysis Program (REVAMP)</param.summary>
+    <param.description>Takes in structured text data for user to apply sequential modifications to data for statistical analysis.</param.description>
+    <param.screenshot>C:\Users\VNEL-1\AppData\Local\Temp\tp74592bfb_1756_4edf_9663_68acb0edc0c1.png</param.screenshot>
+    <param.version>1.0</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory</param.output>
+    <param.guid>df0c2388-2a28-4dea-a542-17c025791294</param.guid>
+    <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\revampModule.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\FILTER\blinkRemoval.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\FILTER\filterTable.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\fftAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\rampAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\saccadeAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\stepAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\analysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\CALIBRATION\calibrationModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\LOAD\loadData.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\revampDataChannels.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\calculatedDataChannels.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\dataChannels.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\tableDataManager.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\revampImport.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\getTextData.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\movementParser.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\sectionBinner.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\sectionHeaderConformer.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\revampPreprocessor.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\SAVE\saveFunction.m</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="C:\Users\VNEL-1\Dropbox\REVAMP" name="AppDirectory" optional="false">C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2023b</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.0</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
