@@ -87,11 +87,11 @@ classdef calculatedDataChannels
                 % Make Left Eye Sign Consistent with Right Eye Sign
                 % Left Eye (+) and Right Eye (-)
                 if(leftSign > rightSign)
-                    channelData(:,and(rightEyeIndex,~pupilIndex)) = rightSign * channelData(:,and(rightEyeIndex,~pupilIndex));
+                    coontains(ans,"AvchannelData(:,and(rightEyeIndex,~pupilIndex)) = rightSign * channelData(:,and(rightEyeIndex,~pupilIndex));
                     % Pupil is Inverted Signs
                     % Near Response (Negative)
                     % Far Response (Positive)
-                    channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
+                    %channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
 
                 
                 % Left Eye (-) and Right Eye (+)
@@ -100,7 +100,7 @@ classdef calculatedDataChannels
                     % Pupil is Inverted Signs
                     % Near Response (Negative)
                     % Far Response (Positive)
-                    channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
+                    %channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
                 end
 
                 % Evaluate Vergence Type
