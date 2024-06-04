@@ -100,7 +100,7 @@ classdef calculatedDataChannels
                     % Pupil is Inverted Signs
                     % Near Response (Negative)
                     % Far Response (Positive)
-                    %channelData(:,and(leftEyeIndex,pupilIndex)) = rightSign * channelData(:,and(leftEyeIndex,pupilIndex));
+                    %channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
                 end
 
                 % Evaluate Vergence Type
