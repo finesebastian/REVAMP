@@ -3,7 +3,7 @@ classdef filterTable
     methods(Static)
 
         % Filter Table Parameter with Provided Filter Parameters
-        function [filteredTable, blinkInTransient] = filterTableData(tableData,filterType,filterOrder,filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary,samplingFrequency,transientBlinkSampleThreshold)
+        function [filteredTable, blinkInTransient, blinkCount] = filterTableData(tableData,filterType,filterOrder,filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary,samplingFrequency,transientBlinkSampleThreshold)
             % Evaluate Filter Type
             if strcmp(filterType,'bandpass')
                 % Vergence Filter
@@ -23,6 +23,9 @@ classdef filterTable
 
             % Create Boolean Flag for Blink in Transient (Default - False)
             blinkInTransient = NaN(size(tableData,1),size(tableData,2));
+
+            % Create Numerical Count of Blinks in Files
+            blinkCount = NaN(size(tableData,1),size(tableData,2));
            
             % Iterate Across Each Column (Data Channel)
             for columnIndex = 1:size(tableData,2)
@@ -30,6 +33,9 @@ classdef filterTable
                 for rowIndex = 1:size(tableData,1)
                     % Default Boolean 
                     blinkInTransientBoolean = false;
+
+                    % Default Number of Blinks
+                    currentBlinksInMovement = 0;
 
                     % Extract Cell Entry
                     tableDataCellEntry = tableData.(tableData.Properties.VariableNames{columnIndex})(rowIndex);
@@ -50,13 +56,15 @@ classdef filterTable
                             % Filter Table Column
                             tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex}) = filter(filterBValues,filterAValues,[tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex})]);
                         end
-                        [blinkRemovedTable, blinkInTransientBoolean] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold);
+                        [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold);
                     
           
                         % Replace Unfilter Data with Filtered Data Entry 
                         filteredTable.(filteredTable.Properties.VariableNames{columnIndex})(rowIndex) = {blinkRemovedTable};
                         % Capture boolean for Blink in Transient
                         blinkInTransient(rowIndex,columnIndex) = blinkInTransientBoolean;
+                        % Capture Number of Blinks in Movement
+                        blinkCount(rowIndex,columnIndex) = currentBlinksInMovement;
                     end
                 end
             end
