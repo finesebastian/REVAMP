@@ -73,17 +73,31 @@ classdef blinkRemoval
                     indexPairs(end,2) = size(outlierIndex,1); 
                 end
 
+                overlappingIndex = false;
+                rowsToRemove = [];
+
                 % Evaluate Proximity of Identified Blink Pairs to Merge 
                 % Subtract One Row for Forward Comparison
-                for(rowIndex = 1:size(indexPairs,1)-1)
+                for(rowIndex = 1:(size(indexPairs,1)-1))
+                    rowComparisonIndex = rowIndex + 1;
                     % Check if Next Pair is Nearby
-                    if(indexPairs(rowIndex,2)) + 25 > indexPairs(rowIndex+1,1)
-                        % Merge Index Pairs
-                        indexPairs(rowIndex,2) = indexPairs(rowIndex+1,2);
-                        % Overwrite Old Pair
-                        indexPairs(rowIndex+1,:) = [];
-                    end
+                    while(rowComparisonIndex <= size(indexPairs,1) && indexPairs(rowIndex,2) + 25 > indexPairs(rowComparisonIndex,1) )
+                        % Merge Index Pairs of Col from Last to Col of
+                        % First
+                        indexPairs(rowIndex,2) = indexPairs(rowComparisonIndex,2);
+                        % Store Duplicate Row
+                        rowsToRemove = [rowsToRemove;rowComparisonIndex];
+                        % Set Boolean for Row Removal
+                        overlappingIndex = true;
 
+                        % Index Comparison
+                        rowComparisonIndex = rowComparisonIndex + 1;
+                    end
+                end
+
+                % If Overlapping Indicies Remove Copies
+                if(overlappingIndex)
+                    indexPairs(rowsToRemove,:) = [];
                 end
 
                 % Return all Index Values
