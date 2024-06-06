@@ -83,15 +83,20 @@ classdef blinkRemoval
         end
 
         % Replaces blinks with NaNs then with surrounding means
-        function [blinkRemovedArray,blinkInTransientBoolean] = removeBlinks(tableData,transientBlinkSampleThreshold)
+        function [blinkRemovedArray,blinkInTransientBoolean, numberOfBlinks] = removeBlinks(tableData,transientBlinkSampleThreshold)
             % Determine If Outliers Exist
             blinkIndexPairs = blinkRemoval.findBlinks(tableData);
 
             % Set Default Boolean
             blinkInTransientBoolean = false;
 
+            % Set Default Blink Count
+            numberOfBlinks = 0;
+
             % Outliers Found
             if(~isempty(blinkIndexPairs))
+                numberOfBlinks = size(blinkIndexPairs,1);
+
                 % Check First Pair for "Transient Blink Index" (Default 750) 
                 if(blinkIndexPairs(1,1) <= transientBlinkSampleThreshold)
                     blinkInTransientBoolean = true;
