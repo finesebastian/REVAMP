@@ -60,18 +60,8 @@ classdef filterTable
                             end
 
                             % Filter Table Column
-                            for (colIndex = 1:size(tableDataEntry.Properties.VariableNames,2))
-                                % Use Pupil Filter for "Pupil" Containing
-                                % Columns
-                                if(contains(tableDataEntry.Properties.VariableNames{variableIndex},"Pupil",'IgnoreCase',true))
-                                    tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex}) = filter(bPupil,aPupil,[tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex})]);
-                                % Otherwise Filter with Determined
-                                % Coefficeints
-                                else
-                                    tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex}) = filter(filterBValues,filterAValues,[tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex})]);
-                                end
-                            end
-
+                            for colI
+                            tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex}) = filter(filterBValues,filterAValues,[tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex})]);
                         end
                         % Perform Blink Removal
                         [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold);
