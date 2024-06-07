@@ -1,0 +1,184 @@
+%% Export Selected Table Data from REVAMP Ecosystem
+classdef exportMetrics
+    methods(Static)
+
+       % Confirm that the Table Data Selected is from post-analysis output
+        function [userSelectedFilePath,userSelectedFiles] = validateExportPath(userSelectedPath, selectedFiles, firstLoadBoolean)
+          % Compare if the File Path Contains known Directory for output
+            if(~contains(string(userSelectedPath), "ANALYSIS_METRICS", "IgnoreCase",true) || firstLoadBoolean)
+                % Ignore Error Message for First Entry to Export
+                if(~firstLoadBoolean)
+                    msgbox("Select From ANALYSIS_METRICS Folder!", "Incorrect Pathway","error", "modal")
+                end
+                % Prompt to Load Data
+                [userSelectedFilePath,userSelectedFiles] = loadData.getTableData();
+
+                % Set First Entry to false (if not already)
+                firstLoadBoolean = false;
+
+                % If user selected files validate selection before
+                % returning else return dialog
+                if(~isempty(userSelectedFilePath))
+                    exportMetrics.validateExportPath(userSelectedFilePath,userSelectedFiles, firstLoadBoolean);
+                else
+                    msgbox("Export Cancelled", "Export Cancelled","warn", "modal")
+                end
+            % Correct Data
+            else
+                 userSelectedFilePath = userSelectedPath;
+                 userSelectedFiles = selectedFiles;
+            end
+        end
+
+        % Caller for Exporting Data
+        function exportMetricData()
+            % Prompt User to Get Metric Table
+            [userSelectedFilePath,userSelectedFiles] = exportMetrics.validateExportPath("...\REVAMPDATA\", "...\REVAMPDATA\", true);
+            
+            % If User Cancels Ignore Empty Paths
+            if(~isempty(userSelectedFilePath)) 
+                % Set Defaults
+                exportedMetricTable = [];
+
+                % Single (Char) or Multiple (Cells) Files Selected
+                if(ischar(userSelectedFiles))
+                   tableOfMetrics = loadData.loadTableData(userSelectedFilePath, userSelectedFiles);
+                   exportedMetricTable = exportMetrics.exportTable(tableOfMetrics, userSelectedFilePath,userSelectedFiles);
+                else
+                    % Iterate over selection
+                    for(fileNum = 1:size(userSelectedFiles, 1))
+                        tableOfMetrics = loadData.loadTableData(userSelectedFilePath, userSelectedFiles{fileNum});
+                        exportedMetricTable = [exportedMetricTable; exportMetrics.exportTable(tableOfMetrics, userSelectedFilePath,userSelectedFiles{fileNum})];
+                    end
+                end
+
+                % Create Export Directory Path
+                exportPath = exportMetrics.generateExportPath(string(userSelectedFilePath));
+
+                % Check if Directory Exists
+                if(~isfolder(exportPath))
+                    mkdir(exportPath)
+                end
+
+                % Write to Directory
+                writetable(exportedMetricTable, fullfile(exportPath, strcat("DataExport_",string(round(posixtime(datetime('now', 'TimeZone', 'local')))),".xlsx")));
+            end
+            
+        end
+
+        % Create Export of Analysis Metrics, Blink Count, Blink in
+        % Transient Boolean, Calibration Metrics
+        function exportTableData = exportTable(tableOfMetrics, userSelectedFilePath,userSelectedFile)
+            % Extract Section Names and # of Movements Per Section
+            currentFileSectionNames = tableOfMetrics.Properties.VariableNames;
+            % Get Number of Movements in Section Names
+            sectionLogicalCells = cellfun(@(tableVariableName) cellfun(@(sectionData) ~isempty(sectionData),tableOfMetrics.(tableVariableName),'UniformOutput',false),currentFileSectionNames,'UniformOutput',false);
+            sectionMovementCounts = cellfun(@(logicalCell) sum(cell2mat(logicalCell),1), sectionLogicalCells);
+
+            % Get Pathing for Supporting Table Data
+            blinkTransientPath = strrep(userSelectedFilePath, "ANALYSIS_METRICS", "BLINK_DATA\BLINK_IN_TRANSIENT");
+            blinkCountPath = strrep(userSelectedFilePath, "ANALYSIS_METRICS", "BLINK_DATA\BLINK_COUNT");
+            gainValuePath = strrep(userSelectedFilePath, "ANALYSIS_METRICS", "CALIBRATION_METRICS");
+
+            % Load Support Table Data 
+            blinkTransientTable = loadData.loadTableData(blinkTransientPath, userSelectedFile);
+            blinkCountTable = loadData.loadTableData(blinkCountPath, userSelectedFile);
+            tempGainCalibrationTable = loadData.loadTableData(gainValuePath, userSelectedFile);
+
+            % Tranpose Gain Table to be Uniform 
+            gainCalibrationTable = array2table(table2array(tempGainCalibrationTable).','RowNames',tempGainCalibrationTable.Properties.VariableNames,'VariableNames',tempGainCalibrationTable.Properties.RowNames);
+            
+
+            % Extract Section Names from Table
+            sectionNames = tableOfMetrics.Properties.VariableNames;
+
+            % Extract Metric Names from First Table in Metric Data Set
+            metricColNames = tableOfMetrics{1, 1}{1}.Properties.VariableNames;
+            
+            % Extract Metric Names from First Table in Metric Data Set
+            gainColNames = gainCalibrationTable.Properties.VariableNames;
+
+            % Extract Row Names from First Table in Metric Data Set
+            metricRowNames = tableOfMetrics{1,1}{1}.Properties.RowNames;
+
+            % Set Empty Variables for Table
+            uniqueMetricColumnNames = [];
+            uniqueGainColumnNames = [];
+
+            % Create Unique Variable Names from Metric Table
+            for(rowIndex = 1:size(metricRowNames,1))
+                uniqueMetricColumnNames = [uniqueMetricColumnNames, cellfun(@(x) strcat(metricRowNames{rowIndex},"_",x),metricColNames)];
+                uniqueGainColumnNames = [uniqueGainColumnNames,cellfun(@(x) strcat(metricRowNames{rowIndex},"_Gain_",x),gainColNames)];
+            end
+
+            % Set Default Leading Export Table Headers
+            defaultHeaders = ["SubjectID", "Study_Name", "Movement", "Movement_Index","Blink_In_Transient","Blink_Count"];
+            uniqueColumnNames = [defaultHeaders,uniqueMetricColumnNames,uniqueGainColumnNames];
+
+           % Set Default Variable Types for Export Sections to Double
+           varTypes = repelem("double",1,size(uniqueColumnNames,2));
+
+           % Set Default First 3 Headers to String
+           varTypes(1,1:3) = "string";
+
+           % Replace Double Type with String for any "Comments"
+           varTypes(contains(uniqueColumnNames, 'Comments', 'IgnoreCase', true)) = "string";
+           
+           % Initialize Empty Export Table
+           exportTableData = table('Size', [sum(sectionMovementCounts) ,size(uniqueColumnNames, 2)], 'VariableNames', uniqueColumnNames, 'VariableTypes', varTypes);
+
+           % Split Selected Filename to Extract Identifiers
+           splitFilename = strsplit(userSelectedFile, "_");
+
+           % Input Values from Metric Table to Export Table
+
+           % Set First Row in Export Table
+           rowEntryIndex = 1;
+
+           % Iterate Across Each Column (Section)
+           for sectionIndex = 1:size(tableOfMetrics, 2)
+               % Iterate Down Each Row (Movement)
+                for movementIndex = 1: sectionMovementCounts(sectionIndex)  
+                    % Fill Default Header Information
+                    exportTableData.SubjectID(rowEntryIndex) = string(splitFilename{1});
+                    exportTableData.Study_Name(rowEntryIndex)= string([splitFilename{3}, splitFilename{4}]);
+                    exportTableData.Movement(rowEntryIndex) = string(sectionNames{sectionIndex});
+                    exportTableData.Movement_Index(rowEntryIndex) = movementIndex;
+
+                    % Fill Blink Data
+                    exportTableData.Blink_Count(rowEntryIndex) = blinkCountTable(movementIndex, sectionIndex);
+                    exportTableData.Blink_In_Transient(rowEntryIndex) = blinkTransientTable(movementIndex, sectionIndex);
+                   
+                    % Fill Export Table with Metric Table Data
+                    for metricTableRowIndex = 1:size(metricRowNames,1)
+                        % Iterate across Column (Variables)
+                        for metricTableColumnIndex = 1:size(metricColNames, 2)
+                            % Identify Current Column Name
+                            currentMetricVariable = strcat(metricRowNames{metricTableRowIndex},"_",metricColNames{metricTableColumnIndex});
+                            exportTableData.(currentMetricVariable)(rowEntryIndex) = tableOfMetrics.(sectionIndex){movementIndex}.(metricTableColumnIndex)(metricTableRowIndex);
+                        end
+
+                        % Iterate Across Gain Column Variables
+                        for gainTableColumnIndex = 1:size(gainColNames, 2)
+                            % Identify Current Column Name
+                            currentGainVariable = strcat(metricRowNames{metricTableRowIndex},"_Gain_",gainColNames{gainTableColumnIndex});
+                            exportTableData.(currentGainVariable)(rowEntryIndex) = gainCalibrationTable.(gainTableColumnIndex)(metricTableRowIndex);
+                        end
+                    end
+                    % Increment Row Entry for Export Table
+                    rowEntryIndex = rowEntryIndex + 1;
+                end
+           end
+        end
+
+        function exportPathway = generateExportPath(rawFilePath)
+
+            % Prepare Export File Path and Save Export Table
+            exportPath = strsplit(rawFilePath, "\");
+            exportPath = exportPath(1:end-2);
+            exportPathway = strrep(strjoin(exportPath, '\\'), "ANALYSIS_METRICS", "EXPORTED_METRICS");
+
+        end
+    end
+end
+
