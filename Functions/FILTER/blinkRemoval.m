@@ -2,11 +2,14 @@
 classdef blinkRemoval
     methods(Static)
         function blinkIndices = findBlinks(tableData)
+            % Boundary Window Condition
+            windowBoundarySize = 50; 
+
             % Calculated variables
             combinedVertical = abs(tableData.("Left Eye Vertical")) + abs(tableData.("Right Eye Vertical"));
 
             % Moving median 50 samples / 500 Hz = 0.1 seconds
-            smoothedCombinedVertical = movmedian(combinedVertical, 50);
+            smoothedCombinedVertical = movmedian(combinedVertical, windowBoundarySize);
 
             % Evaluate if there are any outliers
             % TF, LowerLimit, UpperLimit, Center
@@ -41,9 +44,9 @@ classdef blinkRemoval
 
                 % Create Pairs of Start/End with Evaluations
                 % 1 Denotes a rise 0 -> 1 (Start) w/ 25 Sample Buffer
-                indexPairs(:,1) = [initialBoundary;find(outlierIndex ==1) - 25];
+                indexPairs(:,1) = [initialBoundary;find(outlierIndex ==1) - windowBoundarySize];
                 % -1 Denotes a fall 1 -> -1 (End) w/ 25 Sample Buffer
-                indexPairs(:,2) = [find(outlierIndex == -1) + 25;endBoundary];
+                indexPairs(:,2) = [find(outlierIndex == -1) + windowBoundarySize;endBoundary];
 
                 % Ensure no values below 0 or above size(file)
                 indexPairs(indexPairs <= 0) = 1;
@@ -81,7 +84,7 @@ classdef blinkRemoval
                 for(rowIndex = 1:(size(indexPairs,1)-1))
                     rowComparisonIndex = rowIndex + 1;
                     % Check if Next Pair is Nearby
-                    while(rowComparisonIndex <= size(indexPairs,1) && indexPairs(rowIndex,2) + 25 > indexPairs(rowComparisonIndex,1) )
+                    while(rowComparisonIndex <= size(indexPairs,1) && indexPairs(rowIndex,2) + windowBoundarySize > indexPairs(rowComparisonIndex,1) )
                         % Merge Index Pairs of Col from Last to Col of
                         % First
                         indexPairs(rowIndex,2) = indexPairs(rowComparisonIndex,2);
@@ -112,6 +115,9 @@ classdef blinkRemoval
 
         % Replaces blinks with NaNs then with surrounding means
         function [blinkRemovedArray,blinkInTransientBoolean, numberOfBlinks] = removeBlinks(tableData,transientBlinkSampleThreshold)
+            % Window Boundary Size
+            windowBoundarySize = 50;
+            
             % Determine If Outliers Exist
             blinkIndexPairs = blinkRemoval.findBlinks(tableData);
 
@@ -157,7 +163,7 @@ classdef blinkRemoval
                 end
             end
                 % Run Small Window Filter to Smooth Edges
-                tableData{:,:} = movmedian(tableData{:,:},50,1,"Endpoints","shrink");
+                tableData{:,:} = movmedian(tableData{:,:},windowBoundarySize,1,"Endpoints","shrink");
                 blinkRemovedArray = tableData;
         end
     end
