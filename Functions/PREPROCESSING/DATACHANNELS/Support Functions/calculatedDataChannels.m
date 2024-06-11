@@ -25,14 +25,14 @@ classdef calculatedDataChannels
             meanLeftHorizontalLast50 = mean(channelData(end-49:end,and(horizontalIndex,leftEyeIndex)));
             % Left Eye Pupil
             meanLeftPupilFirst50 = mean(channelData(1:50,and(pupilIndex,leftEyeIndex)));
-            meanLeftPupilLast50 = mean(channelData(end-49:end,and(pupilIndex,leftEyeIndex)));
+            % meanLeftPupilLast50 = mean(channelData(end-49:end,and(pupilIndex,leftEyeIndex)));
 
             % Right Eye Horizontal Evaluation
             meanRightHorizontalFirst50 = mean(channelData(1:50,and(horizontalIndex,rightEyeIndex)));
             meanRightHorizontalLast50 = mean(channelData(end-49:end,and(horizontalIndex,rightEyeIndex)));
             % Right Eye Pupil
             meanRightPupilFirst50 = mean(channelData(1:50,and(pupilIndex,rightEyeIndex)));
-            meanRightPupilLast50 = mean(channelData(end-49:end,and(pupilIndex,rightEyeIndex)));
+            % meanRightPupilLast50 = mean(channelData(end-49:end,and(pupilIndex,rightEyeIndex)));
 
             % Left Eye Vertical Evaluation
             meanLeftVerticalFirst50 = mean(channelData(1:50,and(verticalIndex,leftEyeIndex)));
