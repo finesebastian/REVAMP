@@ -18,7 +18,7 @@ classdef blinkRemoval
 
             % Check for the Outliers if their Amplitude is >5 to the
             % relative median of the vertical trace
-            outlierBooleanMatrix(outlierBooleanMatrix) = combinedVertical(outlierBooleanMatrix)>5+median(combinedVertical(outlierBooleanMatrix));
+            outlierBooleanMatrix(outlierBooleanMatrix) = combinedVertical(outlierBooleanMatrix) > .25 + median(combinedVertical(~outlierBooleanMatrix));
 
             % Check if Boolean Values (0 - False, 1 - True) sums are >0
             % (has Outliers) or =0 (No Outliers)
