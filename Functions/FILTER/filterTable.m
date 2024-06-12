@@ -62,8 +62,8 @@ classdef filterTable
                             % Filter Table Column
                             for (colIndex = 1:size(tableDataEntry.Properties.VariableNames,2))
                                 % Use Pupil Filter for "Pupil" Containing
-                                % Columns
-                                if(contains(tableDataEntry.Properties.VariableNames{variableIndex},"Pupil",'IgnoreCase',true))
+                                % Columns AND Vertical Columns
+                                if(contains(tableDataEntry.Properties.VariableNames{variableIndex},"Pupil",'IgnoreCase',true) || contains(tableDataEntry.Properties.VariableNames{variableIndex},"Vertical",'IgnoreCase',true))
                                     tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex}) = filter(bPupil,aPupil,[tableDataEntry.(tableDataEntry.Properties.VariableNames{variableIndex})]);
                                 % Otherwise Filter with Determined
                                 % Coefficeints
@@ -73,6 +73,7 @@ classdef filterTable
                             end
 
                         end
+
                         % Perform Blink Removal
                         [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold);
                     
