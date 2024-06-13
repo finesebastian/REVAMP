@@ -3,25 +3,23 @@ classdef blinkRemoval
     methods(Static)
         function blinkIndices = findBlinks(tableData)
             % Boundary Window Condition
-            windowBoundarySize = 25; 
+            windowBoundarySize = 50; 
 
             % Calculated variables
             combinedVertical = abs(tableData.("Left Eye Vertical")) + abs(tableData.("Right Eye Vertical"));
             combinedPupil = abs(tableData.("Left Eye Pupil")) + abs(tableData.("Right Eye Pupil"));
 
             % Moving median 50 samples / 500 Hz = 0.1 seconds
+            % Evaluate Acceleration Trace for Anomalies
             smoothedCombinedVertical = movmedian(combinedVertical, windowBoundarySize);
             smoothedCombinedPupil = movmedian(combinedPupil, windowBoundarySize);
 
             % Evaluate if there are any outliers
             % TF, LowerLimit, UpperLimit, Center
             % Defined by 3 Median Absolute Deviations
-            outlierBooleanMatrix = isoutlier(smoothedCombinedVertical,"gesd");
-            outlierBooleanMatrix(isoutlier(smoothedCombinedPupil,"gesd")) = 1;
-
-            % Check for the Outliers if their Amplitude is >2.5 to the
-            % relative median of the vertical trace
-            % outlierBooleanMatrix(outlierBooleanMatrix) = combinedVertical(outlierBooleanMatrix) > 2.5 + median(combinedVertical(~outlierBooleanMatrix)) | combinedPupil(outlierBooleanMatrix) > .5 + median(combinedPupil(~outlierBooleanMatrix));
+            outlierBooleanMatrix = zeros(size(combinedVertical,1),1);
+            outlierBooleanMatrix(isoutlier(smoothedCombinedVertical,"gesd")) = combinedVertical(isoutlier(smoothedCombinedVertical,"gesd")) > 2.5 + median(combinedVertical(~isoutlier(smoothedCombinedVertical,"gesd")));
+            outlierBooleanMatrix(isoutlier(smoothedCombinedPupil,"gesd")) = combinedPupil(isoutlier(smoothedCombinedPupil,"gesd")) > .5 + median(combinedPupil(~isoutlier(smoothedCombinedPupil,"gesd")));
 
             % Check if Boolean Values (0 - False, 1 - True) sums are >0
             % (has Outliers) or =0 (No Outliers)
