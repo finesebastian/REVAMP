@@ -3,26 +3,30 @@ classdef blinkRemoval
     methods(Static)
         function blinkIndices = findBlinks(tableData)
             % Boundary Window Condition
-            windowBoundarySize = 50; 
+            windowBoundarySize = 25; 
 
             % Calculated variables
             combinedVertical = abs(tableData.("Left Eye Vertical")) + abs(tableData.("Right Eye Vertical"));
+            combinedPupil = abs(tableData.("Left Eye Pupil")) + abs(tableData.("Right Eye Pupil"));
 
             % Moving median 50 samples / 500 Hz = 0.1 seconds
             smoothedCombinedVertical = movmedian(combinedVertical, windowBoundarySize);
+            smoothedCombinedPupil = movmedian(combinedPupil, windowBoundarySize);
 
             % Evaluate if there are any outliers
             % TF, LowerLimit, UpperLimit, Center
             % Defined by 3 Median Absolute Deviations
-            outlierBooleanMatrix = isoutlier(smoothedCombinedVertical);
+            outlierBooleanMatrix = isoutlier(smoothedCombinedVertical,"gesd");
+            outlierBooleanMatrix(isoutlier(smoothedCombinedPupil,"gesd")) = 1;
 
             % Check for the Outliers if their Amplitude is >2.5 to the
             % relative median of the vertical trace
-            outlierBooleanMatrix(outlierBooleanMatrix) = combinedVertical(outlierBooleanMatrix) > 2.5 + median(combinedVertical(~outlierBooleanMatrix));
+            % outlierBooleanMatrix(outlierBooleanMatrix) = combinedVertical(outlierBooleanMatrix) > 2.5 + median(combinedVertical(~outlierBooleanMatrix)) | combinedPupil(outlierBooleanMatrix) > .5 + median(combinedPupil(~outlierBooleanMatrix));
 
             % Check if Boolean Values (0 - False, 1 - True) sums are >0
             % (has Outliers) or =0 (No Outliers)
             if(sum(outlierBooleanMatrix)~=0)
+
                 % Outliers Have Been Identified
                 % Create Map of Onset/Offset of Outliers
                 outlierIndex = [0;diff(outlierBooleanMatrix)];
@@ -84,7 +88,7 @@ classdef blinkRemoval
                 for(rowIndex = 1:(size(indexPairs,1)-1))
                     rowComparisonIndex = rowIndex + 1;
                     % Check if Next Pair is Nearby
-                    while(rowComparisonIndex <= size(indexPairs,1) && indexPairs(rowIndex,2) + windowBoundarySize > indexPairs(rowComparisonIndex,1) )
+                    while(rowComparisonIndex <= size(indexPairs,1) && indexPairs(rowIndex,2) > indexPairs(rowComparisonIndex,1) )
                         % Merge Index Pairs of Col from Last to Col of
                         % First
                         indexPairs(rowIndex,2) = indexPairs(rowComparisonIndex,2);
@@ -114,7 +118,7 @@ classdef blinkRemoval
         end
 
         % Replaces blinks with NaNs then with surrounding means
-        function [blinkRemovedArray,blinkInTransientBoolean, numberOfBlinks] = removeBlinks(tableData,transientBlinkSampleThreshold)
+        function [blinkRemovedArray,blinkInTransientBoolean, numberOfBlinks, blinkIndexPairs] = removeBlinks(tableData,transientBlinkSampleThreshold)
             % Window Boundary Size
             windowBoundarySize = 50;
             

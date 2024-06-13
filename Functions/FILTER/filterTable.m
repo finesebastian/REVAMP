@@ -3,7 +3,7 @@ classdef filterTable
     methods(Static)
 
         % Filter Table Parameter with Provided Filter Parameters
-        function [filteredTable, blinkInTransient, blinkCount] = filterTableData(tableData,filterType,filterOrder,filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary,samplingFrequency,transientBlinkSampleThreshold, filterPupilPrimary)
+        function [filteredTable, blinkInTransient, blinkCount, blinkIndex] = filterTableData(tableData,filterType,filterOrder,filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary,samplingFrequency,transientBlinkSampleThreshold, filterPupilPrimary)
             % Evaluate Filter Type
             if strcmp(filterType,'bandpass')
                 % Vergence Filter
@@ -30,6 +30,9 @@ classdef filterTable
 
             % Create Numerical Count of Blinks in Files
             blinkCount = NaN(size(tableData,1),size(tableData,2));
+
+            % Create Numerical Count of Blinks in Files
+            blinkIndex = cell(size(tableData,1),size(tableData,2));
            
             % Iterate Across Each Column (Data Channel)
             for columnIndex = 1:size(tableData,2)
@@ -75,7 +78,7 @@ classdef filterTable
                         end
 
                         % Perform Blink Removal
-                        [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold);
+                        [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement, blinkIndices] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold);
                     
           
                         % Replace Unfilter Data with Filtered Data Entry 
@@ -84,6 +87,8 @@ classdef filterTable
                         blinkInTransient(rowIndex,columnIndex) = blinkInTransientBoolean;
                         % Capture Number of Blinks in Movement
                         blinkCount(rowIndex,columnIndex) = currentBlinksInMovement;
+                        % Capture Index Pair Matrix of Blinks 
+                        blinkIndex(rowIndex,columnIndex) = {blinkIndices};
                     end
                 end
             end
