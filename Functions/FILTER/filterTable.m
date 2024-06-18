@@ -3,7 +3,10 @@ classdef filterTable
     methods(Static)
 
         % Filter Table Parameter with Provided Filter Parameters
-        function [filteredTable, blinkInTransient, blinkCount, blinkIndex] = filterTableData(tableData,filterType,filterOrder,filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary,samplingFrequency,transientBlinkSampleThreshold, filterPupilPrimary)
+        function [filteredTable, blinkInTransient, blinkCount, blinkIndex] = filterTableData(tableData,filterType,filterOrder, ...
+                filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, ...
+                filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary, ...
+                samplingFrequency,transientBlinkSampleThreshold, filterPupilPrimary, blinkFillMethod)
             % Evaluate Filter Type
             if strcmp(filterType,'bandpass')
                 % Vergence Filter
@@ -78,7 +81,7 @@ classdef filterTable
                         end
 
                         % Perform Blink Removal
-                        [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement, blinkIndices] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold);
+                        [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement, blinkIndices] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold,blinkFillMethod);
                     
           
                         % Replace Unfilter Data with Filtered Data Entry 

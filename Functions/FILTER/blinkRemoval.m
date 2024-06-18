@@ -116,7 +116,7 @@ classdef blinkRemoval
         end
 
         % Replaces blinks with NaNs then with surrounding means
-        function [blinkRemovedArray,blinkInTransientBoolean, numberOfBlinks, blinkIndexPairs] = removeBlinks(tableData,transientBlinkSampleThreshold)
+        function [blinkRemovedArray,blinkInTransientBoolean, numberOfBlinks, blinkIndexPairs] = removeBlinks(tableData,transientBlinkSampleThreshold,blinkFillMethod)
             % Window Boundary Size
             windowBoundarySize = 50;
             
@@ -158,9 +158,9 @@ classdef blinkRemoval
                         % would still continue)
                         tableData = fillmissing(tableData,"previous");
 
-                    % Otherwise P-Chip Fill
+                    % Otherwise User Designated Fill
                     else
-                        tableData = fillmissing(tableData,"pchip");    
+                        tableData = fillmissing(tableData,blinkFillMethod);    
                     end
                 end
             end
