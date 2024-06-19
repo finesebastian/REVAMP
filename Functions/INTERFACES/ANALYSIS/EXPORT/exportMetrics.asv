@@ -68,12 +68,9 @@ classdef exportMetrics
                     mkdir(exportPath)
                 end
 
-                % Generate Unique Time Stamp for Naming
-                uniqueTimeStamp = strcat("DataExport_",string(round(posixtime(datetime('now', 'TimeZone', 'local')))),".xlsx");
-
                 % Write to Directory
-                for tableIndex = 1:size(exportedMetricTable,2)
-                    writetable(exportedMetricTable{tableIndex}, fullfile(exportPath, uniqueTimeStamp),'Sheet',tableIndex);
+                for tableIndex = size(exportedMetricTable,2)
+                    writetable(exportedMetricTable{tableIndex}, fullfile(exportPath, strcat("DataExport_",string(round(posixtime(datetime('now', 'TimeZone', 'local')))),".xlsx")),'Sheet',tableIndex);
                 end
             end
             
@@ -190,7 +187,7 @@ classdef exportMetrics
 
                             % Fill Entire Row Based on Offset of Default
                             % Variables
-                            exportTableData{dataChannelSelection}{rowEntryIndex,(size(defaultHeaders,2)+1):end} = [tableOfMetrics.(sectionIndex){movementIndex}{dataChannelSelection,:},gainCalibrationTable{dataChannelSelection,:}];
+                            exportTableData{dataChannelSelection}{1,(size(defaultHeaders,2)+1):end} = [tableOfMetrics.(sectionIndex){movementIndex}{dataChannelSelection,:},gainCalibrationTable{dataChannelSelection,:}];
                         end
                         % Increment Row Entry for Export Table
                         rowEntryIndex = rowEntryIndex + 1;
