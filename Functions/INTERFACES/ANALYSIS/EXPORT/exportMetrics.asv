@@ -37,7 +37,7 @@ classdef exportMetrics
             
             % If User Cancels Ignore Empty Paths
             if(~isempty(userSelectedFilePath)) 
-                % Set Defaults
+                % Set Defaults (Left Right Binocular)
                 exportedMetricTable1 = [];
                 exportedMetricTable2 = [];
                 exportedMetricTable3 = [];
@@ -45,40 +45,53 @@ classdef exportMetrics
                 % Single (Char) or Multiple (Cells) Files Selected
                 if(ischar(userSelectedFiles))
                    tableOfMetrics = loadData.loadTableData(userSelectedFilePath, userSelectedFiles);
-                   exportedMetricTable = exportMetrics.exportTable(tableOfMetrics, userSelectedFilePath, userSelectedFiles);
+                   [exportedMetricTable, numberOfSections, nameOfSections, numberOfDataChannels, nameOfDataChannels] = exportMetrics.exportTable(tableOfMetrics, userSelectedFilePath, userSelectedFiles);
                 else
                     % Iterate over selection
                     for(fileNum = 1:size(userSelectedFiles, 1))
                         tableOfMetrics = loadData.loadTableData(userSelectedFilePath, userSelectedFiles{fileNum});
-                        % Returns 1x3 Cell of Left, Right, Binocular Data
-                        exportedMetrics = exportMetrics.exportTable(tableOfMetrics, userSelectedFilePath,userSelectedFiles{fileNum});
+                        % Returns 3xn Cell of Left, Right, Binocular Data
+                        % with n Number of Sections
+                        [exportedMetrics, numberOfSections, nameOfSections, numberOfDataChannels, nameOfDataChannels] = exportMetrics.exportTable(tableOfMetrics, userSelectedFilePath,userSelectedFiles{fileNum});
+
                         % Vertically Concatenate Tables
-                        exportedMetricTable1 = [exportedMetricTable1;exportedMetrics{1}];
-                        exportedMetricTable2 = [exportedMetricTable2;exportedMetrics{2}];
-                        exportedMetricTable3 = [exportedMetricTable3;exportedMetrics{3}];
+                        % Number of Sections
+                        for (sectionIndex = 1:numberOfSections)
+                            % Number of Data Channels
+                            for (dataChannelRowIndex = numberOfDataChannels)
+                                exportedMetricTable{dataChannelRowIndex,sectionIndex} = [exportedMetricTable{dataChannelRowIndex,sectionIndex};exportedMetrics{dataChannelRowIndex,sectionIndex}];
+                            end
+                        end
                     end
-                    exportedMetricTable = {exportedMetricTable1,exportedMetricTable2,exportedMetricTable3};
                 end
 
                 % Create Export Directory Path
                 exportPath = exportMetrics.generateExportPath(string(userSelectedFilePath));
 
-                % Check if Directory Exists
-                if(~isfolder(exportPath))
-                    mkdir(exportPath)
-                end
+                % Generate Unique Time Stamp for Naming
+                uniqueFileNameAndTimeStamp = strcat("DataExport_",string(round(posixtime(datetime('now', 'TimeZone', 'local')))),".xlsx");
 
-                % Write to Directory
-                for tableIndex = size(exportedMetricTable,2)
-                    writetable(exportedMetricTable{tableIndex}, fullfile(exportPath, strcat("DataExport_",string(round(posixtime(datetime('now', 'TimeZone', 'local')))),".xlsx")),'Sheet',tableIndex);
+                % Save Based on Per Data Channel with Section Names as
+                % Sheets within Export
+                
+                % Down Rows
+                for (dataChannelRowIndex = 1:numberOfDataChannels)
+                    rowFileDirectoryPath = fullfile(exportPath,nameOfDataChannels{dataChannelRowIndex});
+                        % Check if Directory Exists
+                        if(~isfolder(rowFileDirectoryPath))
+                            mkdir(rowFileDirectoryPath)
+                        end
+                    % Across Columns
+                    for (sectionIndex = 1:numberOfSections)
+                        writetable(exportedMetricTable{dataChannelRowIndex,sectionIndex}, fullfile(rowFileDirectoryPath,uniqueFileNameAndTimeStamp),'Sheet',nameOfSections{sectionIndex});
+                    end
                 end
-            end
-            
+            end  
         end
 
         % Create Export of Analysis Metrics, Blink Count, Blink in
         % Transient Boolean, Calibration Metrics
-        function exportTableData = exportTable(tableOfMetrics, userSelectedFilePath,userSelectedFile)
+        function [exportTableData, numberOfSections, nameOfSections, numberOfDataChannels, nameOfDataChannels] = exportTable(tableOfMetrics, userSelectedFilePath,userSelectedFile)
             % Extract Section Names and # of Movements Per Section
             currentFileSectionNames = tableOfMetrics.Properties.VariableNames;
 
@@ -137,12 +150,16 @@ classdef exportMetrics
                varTypes(contains(uniqueColumnNames, 'Comments', 'IgnoreCase', true)) = "string";
                
                % Initialize Empty Export Table
-               exportTableData(dataChannelSelection) = {table('Size', [sum(sectionMovementCounts) ,size(uniqueColumnNames, 2)], 'VariableNames', uniqueColumnNames, 'VariableTypes', varTypes)};
+               exportTableData(dataChannelSelection,1) = {table('Size', [sum(sectionMovementCounts) ,size(uniqueColumnNames, 2)], 'VariableNames', uniqueColumnNames, 'VariableTypes', varTypes)};
     
                % Split Selected Filename to Extract Identifiers
                splitFilename = strsplit(userSelectedFile, "_");
 
             end
+
+            % Duplicate Tables for Each Eye Based on Number of Table Cols
+            % Preserve Rows (1) and Repeat Number of Cols
+            exportTableData = repmat(exportTableData, [1 size(tableOfMetrics, 2)]);
     
                % Input Values from Metric Table to Export Table
     
@@ -155,15 +172,16 @@ classdef exportMetrics
                     for movementIndex = 1: sectionMovementCounts(sectionIndex)  
                         % Fill Respective Tables with Data
                         for(dataChannelSelection = 1:size(metricRowNames,1))
+                            
                             % Fill Default Header Information
-                            exportTableData{dataChannelSelection}.SubjectID(rowEntryIndex) = string(splitFilename{1});
-                            exportTableData{dataChannelSelection}.Study_Name(rowEntryIndex)= string([splitFilename{3}, splitFilename{4}]);
-                            exportTableData{dataChannelSelection}.Movement(rowEntryIndex) = string(sectionNames{sectionIndex});
-                            exportTableData{dataChannelSelection}.Movement_Index(rowEntryIndex) = movementIndex;
+                            exportTableData{dataChannelSelection,sectionIndex}.SubjectID(rowEntryIndex) = string(splitFilename{1});
+                            exportTableData{dataChannelSelection,sectionIndex}.Study_Name(rowEntryIndex)= string([splitFilename{3}, splitFilename{4}]);
+                            exportTableData{dataChannelSelection,sectionIndex}.Movement(rowEntryIndex) = string(sectionNames{sectionIndex});
+                            exportTableData{dataChannelSelection,sectionIndex}.Movement_Index(rowEntryIndex) = movementIndex;
         
                             % Fill Blink Data
-                            exportTableData{dataChannelSelection}.Blink_Count(rowEntryIndex) = blinkCountTable(movementIndex, sectionIndex);
-                            exportTableData{dataChannelSelection}.Blink_In_Transient(rowEntryIndex) = blinkTransientTable(movementIndex, sectionIndex);
+                            exportTableData{dataChannelSelection,sectionIndex}.Blink_Count(rowEntryIndex) = blinkCountTable(movementIndex, sectionIndex);
+                            exportTableData{dataChannelSelection,sectionIndex}.Blink_In_Transient(rowEntryIndex) = blinkTransientTable(movementIndex, sectionIndex);
 
                             % If you do not have the need 4 speed this will
                             % ensure all variables and entries are correct
@@ -187,12 +205,17 @@ classdef exportMetrics
 
                             % Fill Entire Row Based on Offset of Default
                             % Variables
-                            exportTableData{dataChannelSelection}{1,(size(defaultHeaders,2)+1):end} = [tableOfMetrics.(sectionIndex){movementIndex}{dataChannelSelection,:},gainCalibrationTable{dataChannelSelection,:}];
+                            exportTableData{dataChannelSelection,sectionIndex}{rowEntryIndex,(size(defaultHeaders,2)+1):end} = [tableOfMetrics.(sectionIndex){movementIndex}{dataChannelSelection,:},gainCalibrationTable{dataChannelSelection,:}];
                         end
                         % Increment Row Entry for Export Table
                         rowEntryIndex = rowEntryIndex + 1;
                     end
                end
+
+               numberOfSections = size(tableOfMetrics, 2);
+               nameOfSections = exportTableData{1}.Properties.VariableNames;
+               nameOfDataChannels = metricRowNames;
+               numberOfDataChannels = size(metricRowNames,1);
         end
 
         function exportPathway = generateExportPath(rawFilePath)
