@@ -59,7 +59,7 @@ classdef exportMetrics
                         % Number of Sections
                         for (sectionIndex = 1:numberOfSections)
                             % Number of Data Channels
-                            for (dataChannelRowIndex = numberOfDataChannels)
+                            for (dataChannelRowIndex = 1:numberOfDataChannels)
                                 if(isempty(exportedMetricTable))
                                     exportedMetricTable = exportedMetrics;
                                 else
