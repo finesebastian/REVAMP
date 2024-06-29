@@ -59,18 +59,18 @@ classdef calculatedDataChannels
                 channelData(:,and(verticalIndex,rightEyeIndex)) = channelData(:,and(verticalIndex,rightEyeIndex)) - meanRightVerticalFirst50;
             end
 
-            % Calculate For Movement Types
-            % Saccades are Averaged
-            if(contains(dataEntryVariableName,'Sacc','IgnoreCase',true))
-                % Combined Horizontal
-                channelData(:,end+1) = mean((channelData(:,horizontalIndex)),2);
-                % Combined Vertical
-                channelData(:,end+1) = mean((channelData(:,verticalIndex)),2);
-                % Combined Pupil
-                channelData(:,end+1) = mean((channelData(:,pupilIndex)),2);
+            % % Calculate For Movement Types
+            % % Saccades are Averaged
+            % if(contains(dataEntryVariableName,'Sacc','IgnoreCase',true))
+            %     % Combined Horizontal
+            %     channelData(:,end+1) = mean((channelData(:,horizontalIndex)),2);
+            %     % Combined Vertical
+            %     channelData(:,end+1) = mean((channelData(:,verticalIndex)),2);
+            %     % Combined Pupil
+            %     channelData(:,end+1) = mean((channelData(:,pupilIndex)),2);
 
             % All Movements Excluding "Sacc"-ades
-            else
+            if(~contains(dataEntryVariableName,'Sacc','IgnoreCase',true))
                 % This code lives in the shadow of god's sight
 
                 % Evaluate Eye Directions
@@ -110,28 +110,28 @@ classdef calculatedDataChannels
                     % Combined Horizontal
                     channelData(:,horizontalIndex) = abs(channelData(:,horizontalIndex));
 
-                    % Combined Horizontal
-                    channelData(:,end+1) = abs(sum(channelData(:,horizontalIndex),2));
-    
-                    % Combined Vertical
-                    channelData(:,end+1) = abs(sum(channelData(:,verticalIndex),2));
-    
-                    % Combined Pupil
-                    channelData(:,end+1) = mean((channelData(:,pupilIndex)),2);
+                    % % Combined Horizontal
+                    % channelData(:,end+1) = abs(sum(channelData(:,horizontalIndex),2));
+                    % 
+                    % % Combined Vertical
+                    % channelData(:,end+1) = abs(sum(channelData(:,verticalIndex),2));
+                    % 
+                    % % Combined Pupil
+                    % channelData(:,end+1) = mean((channelData(:,pupilIndex)),2);
                 % Divergence is (-)abs()
                 else
                     % Left and Right Eye Consistency with Vergence Type
                     % Combined Horizontal
                     channelData(:,horizontalIndex) = -1*abs(channelData(:,horizontalIndex));
 
-                    % Combined Horizontal
-                    channelData(:,end+1) = -1*abs(sum(channelData(:,horizontalIndex),2));
-    
-                    % Combined Vertical
-                    channelData(:,end+1) = -1*abs(sum(channelData(:,verticalIndex),2));
-    
-                    % Combined Pupil
-                    channelData(:,end+1) = mean((channelData(:,pupilIndex)),2); 
+                    % % Combined Horizontal
+                    % channelData(:,end+1) = -1*abs(sum(channelData(:,horizontalIndex),2));
+                    % 
+                    % % Combined Vertical
+                    % channelData(:,end+1) = -1*abs(sum(channelData(:,verticalIndex),2));
+                    % 
+                    % % Combined Pupil
+                    % channelData(:,end+1) = mean((channelData(:,pupilIndex)),2); 
                 end
 
             end

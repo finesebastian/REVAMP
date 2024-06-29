@@ -29,7 +29,7 @@ classdef dataChannels
 
             % Create Calculated Data Channels
             calculatedChannels = calculatedDataChannels.calculateDataChannels(eyeChannelNames,channelData,dataEntryVariableName);
-            eyeChannelNames = vertcat(eyeChannelNames,["Binocular Horizontal";"Binocular Vertical";"Binocular Pupil"]);
+            % eyeChannelNames = vertcat(eyeChannelNames,["Binocular Horizontal";"Binocular Vertical";"Binocular Pupil"]);
 
             % Create Table with Data Channel Headers as VariableNames 
             tabularDataChannels = array2table(calculatedChannels,"VariableNames",eyeChannelNames);
