@@ -57,10 +57,12 @@ classdef filterTable
                         % Filter Down Columns
                         for variableIndex = 1:size(tableDataEntry.Properties.VariableNames,2)
                             % Determine General Filter Coefficients
+                            % Version
                             if(contains(tableData.Properties.VariableNames{columnIndex},"Sacc",'IgnoreCase',true))
                                 filterAValues = aSaccade;
                                 filterBValues = bSaccade;
-                            elseif(contains(tableData.Properties.VariableNames{columnIndex},"Step",'IgnoreCase',true))
+                            % Else Default Vergence Filter Parameters
+                            else
                                 filterAValues = aVergence;
                                 filterBValues = bVergence;
                             end
@@ -83,7 +85,6 @@ classdef filterTable
                         % Perform Blink Removal
                         [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement, blinkIndices] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold,blinkFillMethod);
                     
-          
                         % Replace Unfilter Data with Filtered Data Entry 
                         filteredTable.(filteredTable.Properties.VariableNames{columnIndex})(rowIndex) = {blinkRemovedTable};
                         % Capture boolean for Blink in Transient

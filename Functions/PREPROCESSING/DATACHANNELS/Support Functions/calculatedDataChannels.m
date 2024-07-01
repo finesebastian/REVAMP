@@ -59,82 +59,82 @@ classdef calculatedDataChannels
                 channelData(:,and(verticalIndex,rightEyeIndex)) = channelData(:,and(verticalIndex,rightEyeIndex)) - meanRightVerticalFirst50;
             end
 
-            % % Calculate For Movement Types
-            % % Saccades are Averaged
-            % if(contains(dataEntryVariableName,'Sacc','IgnoreCase',true))
-            %     % Combined Horizontal
-            %     channelData(:,end+1) = mean((channelData(:,horizontalIndex)),2);
-            %     % Combined Vertical
-            %     channelData(:,end+1) = mean((channelData(:,verticalIndex)),2);
-            %     % Combined Pupil
-            %     channelData(:,end+1) = mean((channelData(:,pupilIndex)),2);
-
-            % All Movements Excluding "Sacc"-ades
-            if(~contains(dataEntryVariableName,'Sacc','IgnoreCase',true))
-                % This code lives in the shadow of god's sight
-
-                % Evaluate Eye Directions
-                % Convention
-                % Convergence is Positive 
-                % Divergence is Negative
-                
-                % Left Eye Horizontal Evaluation
-                leftSign = sign((meanLeftHorizontalLast50 - meanLeftHorizontalFirst50));
-
-                % Right Eye Horizontal Evaluation
-                rightSign = sign((meanRightHorizontalLast50 - meanRightHorizontalFirst50));
-
-                % Make Left Eye Sign Consistent with Right Eye Sign
-                % Left Eye (+) and Right Eye (-)
-                if(leftSign > rightSign)
-                    channelData(:,and(rightEyeIndex,~pupilIndex)) = rightSign * channelData(:,and(rightEyeIndex,~pupilIndex));
-                    % Pupil is Inverted Signs
-                    % Near Response (Negative)
-                    % Far Response (Positive)
-                    %channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
-
-                
-                % Left Eye (-) and Right Eye (+)
-                else
-                    channelData(:,and(rightEyeIndex,~pupilIndex)) = leftSign * channelData(:,and(rightEyeIndex,~pupilIndex));
-                    % Pupil is Inverted Signs
-                    % Near Response (Negative)
-                    % Far Response (Positive)
-                    %channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
-                end
-
-                % Evaluate Vergence Type
-                % Convergence is abs()
-                if(contains(dataEntryVariableName,'Con', 'IgnoreCase',true))
-                    % Left and Right Eye Consistency with Vergence Type
-                    % Combined Horizontal
-                    channelData(:,horizontalIndex) = abs(channelData(:,horizontalIndex));
-
-                    % % Combined Horizontal
-                    % channelData(:,end+1) = abs(sum(channelData(:,horizontalIndex),2));
-                    % 
-                    % % Combined Vertical
-                    % channelData(:,end+1) = abs(sum(channelData(:,verticalIndex),2));
-                    % 
-                    % % Combined Pupil
-                    % channelData(:,end+1) = mean((channelData(:,pupilIndex)),2);
-                % Divergence is (-)abs()
-                else
-                    % Left and Right Eye Consistency with Vergence Type
-                    % Combined Horizontal
-                    channelData(:,horizontalIndex) = -1*abs(channelData(:,horizontalIndex));
-
-                    % % Combined Horizontal
-                    % channelData(:,end+1) = -1*abs(sum(channelData(:,horizontalIndex),2));
-                    % 
-                    % % Combined Vertical
-                    % channelData(:,end+1) = -1*abs(sum(channelData(:,verticalIndex),2));
-                    % 
-                    % % Combined Pupil
-                    % channelData(:,end+1) = mean((channelData(:,pupilIndex)),2); 
-                end
-
-            end
+            % % % Calculate For Movement Types
+            % % % Saccades are Averaged
+            % % if(contains(dataEntryVariableName,'Sacc','IgnoreCase',true))
+            % %     % Combined Horizontal
+            % %     channelData(:,end+1) = mean((channelData(:,horizontalIndex)),2);
+            % %     % Combined Vertical
+            % %     channelData(:,end+1) = mean((channelData(:,verticalIndex)),2);
+            % %     % Combined Pupil
+            % %     channelData(:,end+1) = mean((channelData(:,pupilIndex)),2);
+            % 
+            % % All Movements Excluding "Sacc"-ades
+            % if(~contains(dataEntryVariableName,'Sacc','IgnoreCase',true))
+            %     % This code lives in the shadow of god's sight
+            % 
+            %     % Evaluate Eye Directions
+            %     % Convention
+            %     % Convergence is Positive 
+            %     % Divergence is Negative
+            % 
+            %     % Left Eye Horizontal Evaluation
+            %     leftSign = sign((meanLeftHorizontalLast50 - meanLeftHorizontalFirst50));
+            % 
+            %     % Right Eye Horizontal Evaluation
+            %     rightSign = sign((meanRightHorizontalLast50 - meanRightHorizontalFirst50));
+            % 
+            %     % Make Left Eye Sign Consistent with Right Eye Sign
+            %     % Left Eye (+) and Right Eye (-)
+            %     if(leftSign > rightSign)
+            %         channelData(:,and(rightEyeIndex,~pupilIndex)) = rightSign * channelData(:,and(rightEyeIndex,~pupilIndex));
+            %         % Pupil is Inverted Signs
+            %         % Near Response (Negative)
+            %         % Far Response (Positive)
+            %         %channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
+            % 
+            % 
+            %     % Left Eye (-) and Right Eye (+)
+            %     else
+            %         channelData(:,and(rightEyeIndex,~pupilIndex)) = leftSign * channelData(:,and(rightEyeIndex,~pupilIndex));
+            %         % Pupil is Inverted Signs
+            %         % Near Response (Negative)
+            %         % Far Response (Positive)
+            %         %channelData(:,and(leftEyeIndex,pupilIndex)) = leftSign * channelData(:,and(leftEyeIndex,pupilIndex));
+            %     end
+            % 
+            %     % Evaluate Vergence Type
+            %     % Convergence is abs()
+            %     if(contains(dataEntryVariableName,'Con', 'IgnoreCase',true))
+            %         % Left and Right Eye Consistency with Vergence Type
+            %         % Combined Horizontal
+            %         channelData(:,horizontalIndex) = abs(channelData(:,horizontalIndex));
+            % 
+            %         % % Combined Horizontal
+            %         % channelData(:,end+1) = abs(sum(channelData(:,horizontalIndex),2));
+            %         % 
+            %         % % Combined Vertical
+            %         % channelData(:,end+1) = abs(sum(channelData(:,verticalIndex),2));
+            %         % 
+            %         % % Combined Pupil
+            %         % channelData(:,end+1) = mean((channelData(:,pupilIndex)),2);
+            %     % Divergence is (-)abs()
+            %     else
+            %         % Left and Right Eye Consistency with Vergence Type
+            %         % Combined Horizontal
+            %         channelData(:,horizontalIndex) = -1*abs(channelData(:,horizontalIndex));
+            % 
+            %         % % Combined Horizontal
+            %         % channelData(:,end+1) = -1*abs(sum(channelData(:,horizontalIndex),2));
+            %         % 
+            %         % % Combined Vertical
+            %         % channelData(:,end+1) = -1*abs(sum(channelData(:,verticalIndex),2));
+            %         % 
+            %         % % Combined Pupil
+            %         % channelData(:,end+1) = mean((channelData(:,pupilIndex)),2); 
+            %     end
+            % 
+            % end
 
             % Assign Variable Output
             calculatedChannels = channelData;
