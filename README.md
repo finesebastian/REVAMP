@@ -1,2 +1,0 @@
-# REVAMP
-REVAMP Software Repo
