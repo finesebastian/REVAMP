@@ -114,6 +114,7 @@ classdef exportMetrics
             blinkTransientTable = loadData.loadTableData(blinkTransientPath, userSelectedFile);
             blinkCountTable = loadData.loadTableData(blinkCountPath, userSelectedFile);
             tempGainCalibrationTable = loadData.loadTableData(gainValuePath, userSelectedFile);
+            tempGainCalibrationTable.("Binocular") = mean(tempGainCalibrationTable.Variables,2);
 
             % Tranpose Gain Table to be Uniform 
             gainCalibrationTable = array2table(table2array(tempGainCalibrationTable).','RowNames',tempGainCalibrationTable.Properties.VariableNames,'VariableNames',tempGainCalibrationTable.Properties.RowNames);
