@@ -2,11 +2,17 @@ classdef plusoptixToVisualEyes
     methods(Static)
         function fileConverter(OS_ACC,OS_Pupil,OS_Vert,OD_ACC,OD_Pupil,OD_Vert,triggerData,selectedProtocol,fileName)
             %% Anonymous Functions
-            
+
+            % Creates a Padded Cell Matrix Based on Boolean and Distance
+            padMatrix = @(cellData, distanceValue, roundBoolean) [cellData;cellData(end,:).*ones((roundBoolean*distanceValue),size(cellData,2))]; 
+
+            % Evaluate the Sizing to See if Mod(N,50) > .5
+            sizeCheck = @(cellData) padMatrix(cellData,50-mod(size(cellData,1),50),round((mod(size(cellData,1),50))/50));
+
             % Trim Matrix to be in lengths of 50*N
             % mod(50) is due to the sampling rate of PlusOptix being 50Hz
-            squareMatrix = @(cellData) cellData(1:size(cellData,1) - mod(size(cellData,1),50),:);
-            
+            squareMatrix = @(cellData) cellData(1:(size(cellData,1) - mod(size(cellData,1),50)),:);
+
             % VisualEyes Data Format Generator
             dataInjection = @(tableOfData,movementTitle) [movementTitle;"Collected";"Date Time";"Delta T";"0.02000";...
                        "Right Eye Horizontal";tableOfData(:,4);...
@@ -16,7 +22,7 @@ classdef plusoptixToVisualEyes
                         "Right Eye Vertical";tableOfData(:,6);...
                         "Right Eye Pupil";tableOfData(:,5);"End Trial"];
             
-            % Extract Only Meaningful Variables for Analysis
+            %% Extract Only Meaningful Variables for Analysis
             % LeftPupilDiameter, LeftRefraction, RightPupilDiameter,% RightRefraction
             if(isempty(OS_Vert)||isempty(OD_Vert))
                 OS_Vert = zeros(size(OS_ACC,1),1);
@@ -61,8 +67,9 @@ classdef plusoptixToVisualEyes
             
             end
             
-            % Cell Function to Apply Anonymous Function to Trim Matrix to 50
-            squaredData = cellfun(squareMatrix, movementDataArray, 'UniformOutput', false);
+            % Cell Function to Apply Anonymous Function to Size Matrix and Trim Matrix to 50
+            sizedData = cellfun(sizeCheck, movementDataArray, 'UniformOutput', false);
+            squaredData = cellfun(squareMatrix, sizedData, 'UniformOutput', false);
             
             % Format Data for Visual Eyes (Put the Raccoons in the Trench Coat)
             % Movement Headers Per Column
