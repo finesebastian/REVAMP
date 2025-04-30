@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2537145088" file="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory" name="ReVAMP" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="2745263011" file="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory" name="ReVAMP" target="target.mlapps" target-name="Package App">
     <param.appname>ReVAMP</param.appname>
     <param.authnamewatermark>Sebastian Fine</param.authnamewatermark>
     <param.email>snf5@njit.edu</param.email>
@@ -9,7 +9,7 @@
     <param.summary>Revitalized Vergence Eye Movement Analysis Program (REVAMP)</param.summary>
     <param.description>Takes in structured text data for user to apply sequential modifications to data for statistical analysis.</param.description>
     <param.screenshot />
-    <param.version>1.2.0.0</param.version>
+    <param.version>1.0.0.0</param.version>
     <param.products.name>
       <item>MATLAB</item>
       <item>DSP System Toolbox</item>
