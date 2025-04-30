@@ -48,11 +48,8 @@ classdef plusoptixToVisualEyes
             while(currentRowIndex <= size(extractedTableData,1))
                 % Trigger Boolean is Always last (END) column of extractedTable var
             
-                % If False Flag (No Movement Recorded)
-                if(extractedTableData(currentRowIndex,end)==0)
-                    currentRowIndex = currentRowIndex + 1;
                 % If True Flag (Movement Recorded)
-                else
+                if(extractedTableData(currentRowIndex,end)==1)
                     % Capture Being Index of Movement
                     movementStartIndex = currentRowIndex;
             
@@ -63,6 +60,9 @@ classdef plusoptixToVisualEyes
                     % Return All Data Except Trigger Column (end - 1)
                     movementDataArray{numberOfMovements} = extractedTableData(movementStartIndex:currentRowIndex,[1:end-1]);
                     numberOfMovements = numberOfMovements + 1;
+                % Ignore Any Other Value
+                else
+                    currentRowIndex = currentRowIndex + 1;
                 end
             
             end
