@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2745263011" file="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory" name="ReVAMP" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="1241330266" file="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory" name="ReVAMP" target="target.mlapps" target-name="Package App">
     <param.appname>ReVAMP</param.appname>
     <param.authnamewatermark>Sebastian Fine</param.authnamewatermark>
     <param.email>snf5@njit.edu</param.email>
@@ -54,7 +54,9 @@
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\EXPORT\exportMetrics.m</file>
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\mainAnalysisModule.mlapp</file>
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\CALIBRATION\calibrationModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\MAIN\accommodationFileConverter.mlapp</file>
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\LOAD\loadData.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\ACCOMMODATION\plusoptixToVisualEyes.m</file>
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\revampDataChannels.m</file>
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\calculatedDataChannels.m</file>
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\dataChannels.m</file>
