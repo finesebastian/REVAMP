@@ -6,7 +6,7 @@ classdef filterTable
         function [filteredTable, blinkInTransient, blinkCount, blinkIndex] = filterTableData(tableData,filterType,filterOrder, ...
                 filterVergenceCutoffPrimary, filterVergenceCutoffSecondary, ...
                 filterSaccadeCutoffPrimary, filterSaccadeCutoffSecondary, ...
-                samplingFrequency,transientBlinkSampleThreshold, filterPupilPrimary, blinkFillMethod)
+                samplingFrequency,transientBlinkSampleThreshold, filterPupilPrimary, blinkFillMethod, accommodationDataBoolean)
             % Evaluate Filter Type
             if strcmp(filterType,'bandpass')
                 % Vergence Filter
@@ -54,6 +54,23 @@ classdef filterTable
                     % Check if Table Data Entry is Empty
                     if ~isempty(tableDataCellEntry{:})
                         tableDataEntry = tableDataCellEntry{:};
+
+                        % Replace Missing Data with NEAREST nonmissing
+                        % Specification Made through PlusOptix Specs 
+                        % Range +5/-7 Diopters 
+                        if(accommodationDataBoolean)
+                            tableDataEntry{(abs(tableDataEntry{:,1}) > 7),1} = NaN;
+                            tableDataEntry{(abs(tableDataEntry{:,2}) > 7),2} = NaN;
+                            fillmissing(tableDataEntry,"nearest");
+
+                            % Check all missing Data Conditions
+                            if(sum(isnan(tableDataEntry{:,1})) == size(tableDataEntry{:,1},1))
+                                tableDataEntry{:,1} = 0;
+                            elseif (sum(isnan(tableDataEntry{:,2})) == size(tableDataEntry{:,2},1))
+                                tableDataEntry{:,2} = 0;
+                            end
+                        end
+
                         % Filter Down Columns
                         for variableIndex = 1:size(tableDataEntry.Properties.VariableNames,2)
                             % Determine General Filter Coefficients
@@ -82,17 +99,26 @@ classdef filterTable
 
                         end
 
-                        % Perform Blink Removal
-                        [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement, blinkIndices] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold,blinkFillMethod);
-                    
-                        % Replace Unfilter Data with Filtered Data Entry 
-                        filteredTable.(filteredTable.Properties.VariableNames{columnIndex})(rowIndex) = {blinkRemovedTable};
-                        % Capture boolean for Blink in Transient
-                        blinkInTransient(rowIndex,columnIndex) = blinkInTransientBoolean;
-                        % Capture Number of Blinks in Movement
-                        blinkCount(rowIndex,columnIndex) = currentBlinksInMovement;
-                        % Capture Index Pair Matrix of Blinks 
-                        blinkIndex(rowIndex,columnIndex) = {blinkIndices};
+                        % Added Functionality for bypassing accommodation
+                        % data
+                        if(~accommodationDataBoolean)
+    
+                            % Perform Blink Removal
+                            [blinkRemovedTable, blinkInTransientBoolean, currentBlinksInMovement, blinkIndices] = blinkRemoval.removeBlinks(tableDataEntry,transientBlinkSampleThreshold,blinkFillMethod);
+                        
+                            % Replace Unfilter Data with Filtered Data Entry 
+                            filteredTable.(filteredTable.Properties.VariableNames{columnIndex})(rowIndex) = {blinkRemovedTable};
+                            % Capture boolean for Blink in Transient
+                            blinkInTransient(rowIndex,columnIndex) = blinkInTransientBoolean;
+                            % Capture Number of Blinks in Movement
+                            blinkCount(rowIndex,columnIndex) = currentBlinksInMovement;
+                            % Capture Index Pair Matrix of Blinks 
+                            blinkIndex(rowIndex,columnIndex) = {blinkIndices};
+
+                        else
+                            % Replace Unfilter Data with Filtered Data Entry 
+                            filteredTable.(filteredTable.Properties.VariableNames{columnIndex})(rowIndex) = {tableDataEntry};
+                        end
                     end
                 end
             end

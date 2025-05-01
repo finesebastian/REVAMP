@@ -1,6 +1,6 @@
 classdef plusoptixToVisualEyes
     methods(Static)
-        function fileConverter(OS_ACC,OS_Pupil,OS_Vert,OD_ACC,OD_Pupil,OD_Vert,triggerData,selectedProtocol,fileName)
+        function fileConverter(OD_ACC,OS_ACC,OS_Vert,OS_Pupil,OD_Vert,OD_Pupil,triggerData,selectedProtocol,fileName)
             %% Anonymous Functions
 
             % Creates a Padded Cell Matrix Based on Boolean and Distance
@@ -15,12 +15,12 @@ classdef plusoptixToVisualEyes
 
             % VisualEyes Data Format Generator
             dataInjection = @(tableOfData,movementTitle) [movementTitle;"Collected";"Date Time";"Delta T";"0.02000";...
-                       "Right Eye Horizontal";tableOfData(:,4);...
-                        "Left Eye Horizontal";tableOfData(:,1);...
+                       "Right Eye Horizontal";tableOfData(:,1);...
+                        "Left Eye Horizontal";tableOfData(:,2);...
                         "Left Eye Vertical";tableOfData(:,3);...
-                        "Left Eye Pupil";tableOfData(:,2);...
-                        "Right Eye Vertical";tableOfData(:,6);...
-                        "Right Eye Pupil";tableOfData(:,5);"End Trial"];
+                        "Left Eye Pupil";tableOfData(:,4);...
+                        "Right Eye Vertical";tableOfData(:,5);...
+                        "Right Eye Pupil";tableOfData(:,6);"End Trial"];
             
             %% Extract Only Meaningful Variables for Analysis
             % LeftPupilDiameter, LeftRefraction, RightPupilDiameter,% RightRefraction
@@ -36,7 +36,7 @@ classdef plusoptixToVisualEyes
 
             % Form Data Blocks
             % LE ACC, LE PUP, LE VERT, RE ACC, RE PUP, RE VERT, Trigger
-            extractedTableData = [OS_ACC,OS_Pupil,OS_Vert,OD_ACC,OD_Pupil,OD_Vert,triggerData];
+            extractedTableData = [OD_ACC,OS_ACC,OS_Vert,OS_Pupil,OD_Vert,OD_Pupil,triggerData];
             
             %% Split Accommodative Responses
             
