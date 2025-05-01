@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="1241330266" file="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory" name="ReVAMP" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="140592308" file="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory" name="ReVAMP" target="target.mlapps" target-name="Package App">
     <param.appname>ReVAMP</param.appname>
     <param.authnamewatermark>Sebastian Fine</param.authnamewatermark>
     <param.email>snf5@njit.edu</param.email>
@@ -69,7 +69,9 @@
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\revampPreprocessor.m</file>
       <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\SAVE\saveFunction.m</file>
     </fileset.depfun>
-    <fileset.resources />
+    <fileset.resources>
+      <file>C:\Users\VNEL-1\Dropbox\REVAMP\revampData</file>
+    </fileset.resources>
     <fileset.package />
     <build-deliverables>
       <file location="C:\Users\VNEL-1\Dropbox\REVAMP" name="AppDirectory" optional="false">C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory</file>
