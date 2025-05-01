@@ -59,16 +59,16 @@ classdef filterTable
                         % Specification Made through PlusOptix Specs 
                         % Range +5/-7 Diopters 
                         if(accommodationDataBoolean)
-                            tableDataEntry{(abs(tableDataEntry{:,1}) > 7),1} = NaN;
-                            tableDataEntry{(abs(tableDataEntry{:,2}) > 7),2} = NaN;
-                            fillmissing(tableDataEntry,"nearest");
+                            tableDataEntry{(abs(tableDataEntry{:,1}) > 7),1} = 0;
+                            tableDataEntry{(abs(tableDataEntry{:,2}) > 7),2} = 0;
 
-                            % Check all missing Data Conditions
-                            if(sum(isnan(tableDataEntry{:,1})) == size(tableDataEntry{:,1},1))
-                                tableDataEntry{:,1} = 0;
-                            elseif (sum(isnan(tableDataEntry{:,2})) == size(tableDataEntry{:,2},1))
-                                tableDataEntry{:,2} = 0;
-                            end
+
+                            % % Check all missing Data Conditions
+                            % if(sum(isnan(tableDataEntry{:,1})) == size(tableDataEntry{:,1},1))
+                            %     tableDataEntry{:,1} = 0;
+                            % elseif (sum(isnan(tableDataEntry{:,2})) == size(tableDataEntry{:,2},1))
+                            %     tableDataEntry{:,2} = 0;
+                            % end
                         end
 
                         % Filter Down Columns
