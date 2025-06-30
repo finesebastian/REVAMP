@@ -1,6 +1,6 @@
 classdef plusoptixToVisualEyes
     methods(Static)
-        function fileConverter(OD_ACC,OS_ACC,OS_Vert,OS_Pupil,OD_Vert,OD_Pupil,triggerData,selectedProtocol,fileName)
+        function fileConverter(OD_ACC,OS_ACC,OS_Vert,OS_Pupil,OS_PupilBoolean,OD_Vert,OD_Pupil,OD_PupilBoolean,triggerData,selectedProtocol,fileName)
             %% Anonymous Functions
 
             % Creates a Padded Cell Matrix Based on Boolean and Distance
@@ -35,8 +35,9 @@ classdef plusoptixToVisualEyes
             end
 
             % Form Data Blocks
-            % LE ACC, LE PUP, LE VERT, RE ACC, RE PUP, RE VERT, Trigger
-            extractedTableData = [OD_ACC,OS_ACC,OS_Vert,OS_Pupil,OD_Vert,OD_Pupil,triggerData];
+            extractedTableData = [OD_ACC,OS_ACC,OS_Vert,OS_Pupil, OD_Vert,OD_Pupil, OS_PupilBoolean, OD_PupilBoolean,triggerData];
+            OS_Indices = [2,3,4,7];
+            OD_Indices = [1,5,6,8];
             
             %% Split Accommodative Responses
             
@@ -57,8 +58,22 @@ classdef plusoptixToVisualEyes
                     while(currentRowIndex <= size(extractedTableData,1) && extractedTableData(currentRowIndex,end)==1 )
                         currentRowIndex = currentRowIndex+1;
                     end
-                    % Return All Data Except Trigger Column (end - 1)
-                    movementDataArray{numberOfMovements} = extractedTableData(movementStartIndex:currentRowIndex,[1:end-1]);
+
+                    % Check Missing Flags and Return Data Except Trigger
+                    tempData = extractedTableData(movementStartIndex:currentRowIndex,[1:end-1]);
+
+                    % Check Left 
+                    % Pupil Found L || Accommodation Signal < -7D OR > 5
+                    tempData((~tempData(:,OS_Indices(end)) | tempData(:,OS_Indices(1)) < -7 | tempData(:,OS_Indices(1) > 5)),OS_Indices(1:end-1)) = nan;
+                    
+                    % Check Right 
+                    % Pupil Found L || Accommodation Signal < -7D OR > 5
+                    tempData((~tempData(:,OD_Indices(end)) | tempData(:,OD_Indices(1)) < -7 | tempData(:,OD_Indices(1) > 5)),OD_Indices(1:end-1)) = nan;
+
+                    % Fill Missing Remove PupilFound Booleans
+                    movementData = fillmissing(tempData(:,1:end-2,"nearest",1));
+
+                    movementDataArray{numberOfMovements} = movementData;
                     numberOfMovements = numberOfMovements + 1;
                 % Ignore Any Other Value
                 else
