@@ -71,7 +71,7 @@ classdef plusoptixToVisualEyes
                     tempData((~tempData(:,OD_Indices(end)) | tempData(:,OD_Indices(1)) < -7 | tempData(:,OD_Indices(1) > 5)),OD_Indices(1:end-1)) = nan;
 
                     % Fill Missing Remove PupilFound Booleans
-                    movementData = fillmissing(tempData(:,1:end-2,"nearest",1));
+                    movementData = fillmissing(tempData(:,1:end-2),"nearest",1);
 
                     movementDataArray{numberOfMovements} = movementData;
                     numberOfMovements = numberOfMovements + 1;
