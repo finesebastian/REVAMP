@@ -2,13 +2,13 @@
 classdef revampPreprocessor
     methods(Static)
         % Main Caller Class for the Preprocessing Workflow
-        function [generalRootPath, preprocessCompleteBoolean,dataFilepaths] = preprocessData()
+        function [generalRootPath, preprocessCompleteBoolean,dataFilepaths] = preprocessData(plusOptixBoolean)
     
             % Import .TXT Data convert to Table with Array Entries
             [generalRootPath, tabularDataFilePaths, parWorkers, importCompleteBoolean] = revampImport.importRawData();
 
             % Format Data Channels convert to Table with Table Entries
-            [tableFormattingCompletionBoolean, processedDataFilepaths] = revampDataChannels.formatTableData(tabularDataFilePaths, parWorkers);
+            [tableFormattingCompletionBoolean, processedDataFilepaths] = revampDataChannels.formatTableData(tabularDataFilePaths, parWorkers, plusOptixBoolean);
 
             % Return Status of Preprocessing for success of both modules
             if tableFormattingCompletionBoolean && importCompleteBoolean

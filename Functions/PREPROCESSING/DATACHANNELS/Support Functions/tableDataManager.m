@@ -1,7 +1,7 @@
 %% Intake Table and Process Individual Entries
 classdef tableDataManager
     methods(Static)
-        function organizedTableData = processTableData(tableData)
+        function organizedTableData = processTableData(tableData,plusOptixBoolean)
 
             % Iterate Through Table Data for Data Channel Organization
             for colIndex = 1:size(tableData,2)
@@ -18,7 +18,7 @@ classdef tableDataManager
                     if(~isempty(dataEntry))
 
                         % Process DataEntry with Table Data Returned
-                        tabularDataChannels = dataChannels.parseTableData(dataEntry, (tableData.Properties.VariableNames{colIndex}));
+                        tabularDataChannels = dataChannels.parseTableData(dataEntry, (tableData.Properties.VariableNames{colIndex}),plusOptixBoolean);
     
                         % Replace Initial Entry with returned Table Entry
                         % Extract Variable Name that Increments with ColIndex

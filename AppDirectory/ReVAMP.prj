@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="1187292176" file="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory" name="ReVAMP" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="761531300" file="C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\AppDirectory\ReVAMP.prj" location="C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\AppDirectory" name="ReVAMP" target="target.mlapps" target-name="Package App">
     <param.appname>ReVAMP</param.appname>
     <param.authnamewatermark>Sebastian Fine</param.authnamewatermark>
     <param.email>snf5@njit.edu</param.email>
@@ -9,7 +9,7 @@
     <param.summary>Revitalized Vergence Eye Movement Analysis Program (REVAMP)</param.summary>
     <param.description>Takes in structured text data for user to apply sequential modifications to data for statistical analysis.</param.description>
     <param.screenshot />
-    <param.version>1.0.0.5</param.version>
+    <param.version>1.0.0.2</param.version>
     <param.products.name>
       <item>MATLAB</item>
       <item>DSP System Toolbox</item>
@@ -42,39 +42,39 @@
       <param.output />
     </unset>
     <fileset.main>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\MAIN\revampModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\MAIN\revampModule.mlapp</file>
     </fileset.main>
     <fileset.depfun>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\FILTER\blinkRemoval.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\FILTER\filterTable.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\fftAnalysisModule.mlapp</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\rampAnalysisModule.mlapp</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\saccadeAnalysisModule.mlapp</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\stepAnalysisModule.mlapp</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\EXPORT\exportMetrics.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\ANALYSIS\mainAnalysisModule.mlapp</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\CALIBRATION\calibrationModule.mlapp</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\INTERFACES\MAIN\accommodationFileConverter.mlapp</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\LOAD\loadData.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\ACCOMMODATION\plusoptixToVisualEyes.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\revampDataChannels.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\calculatedDataChannels.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\dataChannels.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\tableDataManager.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\revampImport.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\getTextData.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\movementParser.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\sectionBinner.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\sectionHeaderConformer.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\PREPROCESSING\revampPreprocessor.m</file>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\Functions\SAVE\saveFunction.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\FILTER\blinkRemoval.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\FILTER\filterTable.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\fftAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\rampAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\saccadeAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\ANALYSIS\ANALYSIS_MODULES\stepAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\ANALYSIS\EXPORT\exportMetrics.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\ANALYSIS\mainAnalysisModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\CALIBRATION\calibrationModule.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\INTERFACES\MAIN\accommodationFileConverter.mlapp</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\LOAD\loadData.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\ACCOMMODATION\plusoptixToVisualEyes.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\revampDataChannels.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\calculatedDataChannels.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\dataChannels.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\DATACHANNELS\Support Functions\tableDataManager.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\IMPORT\revampImport.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\getTextData.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\movementParser.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\sectionBinner.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\IMPORT\Support Functions\sectionHeaderConformer.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\PREPROCESSING\revampPreprocessor.m</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\Functions\SAVE\saveFunction.m</file>
     </fileset.depfun>
     <fileset.resources>
-      <file>C:\Users\VNEL-1\Dropbox\REVAMP\revampData</file>
+      <file>C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\revampData\SEQUENCES</file>
     </fileset.resources>
     <fileset.package />
     <build-deliverables>
-      <file location="C:\Users\VNEL-1\Dropbox\REVAMP" name="AppDirectory" optional="false">C:\Users\VNEL-1\Dropbox\REVAMP\AppDirectory</file>
+      <file location="C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP" name="AppDirectory" optional="false">C:\Users\VNEL-1\Dropbox\2025Maddox\REVAMP\AppDirectory</file>
     </build-deliverables>
     <workflow />
     <matlab>

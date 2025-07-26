@@ -59,8 +59,11 @@ classdef filterTable
                         % Specification Made through PlusOptix Specs 
                         % Range +5/-7 Diopters 
                         if(accommodationDataBoolean)
-                            tableDataEntry{(abs(tableDataEntry{:,1}) > 7),1} = 0;
-                            tableDataEntry{(abs(tableDataEntry{:,2}) > 7),2} = 0;
+                            tableDataEntry{(abs(tableDataEntry{:,1}) > 7),1} = missing;
+                            tableDataEntry{(abs(tableDataEntry{:,2}) > 7),2} = missing;
+
+                            tableDataEntry{:,1} = fillmissing(tableDataEntry{:,1},'constant',0);
+                            tableDataEntry{:,2} = fillmissing(tableDataEntry{:,2},'constant',0);
 
 
                             % % Check all missing Data Conditions

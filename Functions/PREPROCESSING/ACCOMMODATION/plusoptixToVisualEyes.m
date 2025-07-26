@@ -64,11 +64,15 @@ classdef plusoptixToVisualEyes
 
                     % Check Left 
                     % Pupil Found L || Accommodation Signal < -7D OR > 5
-                    tempData((~tempData(:,OS_Indices(end)) | tempData(:,OS_Indices(1)) < -7 | tempData(:,OS_Indices(1) > 5)),OS_Indices(1:end-1)) = nan;
+                    % Removed the PupilFound Boolean Check
+                    % ~tempData(:,OS_Indices(end)) | 
+                    tempData((tempData(:,OS_Indices(1)) < -7 | tempData(:,OS_Indices(1) > 5)),OS_Indices(1:end-1)) = missing;
                     
                     % Check Right 
                     % Pupil Found L || Accommodation Signal < -7D OR > 5
-                    tempData((~tempData(:,OD_Indices(end)) | tempData(:,OD_Indices(1)) < -7 | tempData(:,OD_Indices(1) > 5)),OD_Indices(1:end-1)) = nan;
+                    % Removed the PupilFound Boolean Check
+                    % ~tempData(:,OD_Indices(end)) | 
+                    tempData((tempData(:,OD_Indices(1)) < -7 | tempData(:,OD_Indices(1) > 5)),OD_Indices(1:end-1)) = missing;
 
                     % Fill Missing Remove PupilFound Booleans
                     movementData = fillmissing(tempData(:,1:end-2),"nearest",1);

@@ -1,7 +1,7 @@
 %% Caller Class for Formatting Data Channels within Imported Data
 classdef revampDataChannels
     methods(Static)
-        function [tableFormattingCompletionBoolean, processedDataFilepaths] = formatTableData(tabularDataFilePaths, parWorkers)
+        function [tableFormattingCompletionBoolean, processedDataFilepaths] = formatTableData(tabularDataFilePaths, parWorkers, plusOptixBoolean)
 
             % If File(s) Are all Rejected
             if(~isempty(tabularDataFilePaths))
@@ -15,7 +15,7 @@ classdef revampDataChannels
                     importedTabularData = importedTabularData.importedData;
     
                     % Organize Table Data 
-                    organizedTabularData = tableDataManager.processTableData(importedTabularData);
+                    organizedTabularData = tableDataManager.processTableData(importedTabularData, plusOptixBoolean);
     
                     % Save Organized Data Tables
                     processedFilePath = strrep(tabularDataFilePaths{1},'IMPORTED_RAW',"UNFILTERED_UNCALIBRATED");
@@ -44,7 +44,7 @@ classdef revampDataChannels
                             importedTabularData = importedTabularData.importedData;
         
                             % Organize Table Data 
-                            organizedTabularData = tableDataManager.processTableData(importedTabularData);
+                            organizedTabularData = tableDataManager.processTableData(importedTabularData,plusOptixBoolean);
         
                             % Save Organized Data Tables
                             processedFilePath = strrep(tabularDataFilePaths{filePathIndex},"IMPORTED_RAW","UNFILTERED_UNCALIBRATED");

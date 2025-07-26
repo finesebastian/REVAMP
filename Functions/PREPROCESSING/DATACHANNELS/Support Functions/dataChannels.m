@@ -2,7 +2,7 @@
 classdef dataChannels
     methods(Static)
         % Intakes Individual Data Entry as Array Returns Table 
-        function tabularDataChannels = parseTableData(tabularData, dataEntryVariableName)
+        function tabularDataChannels = parseTableData(tabularData, dataEntryVariableName, plusOptixBoolean)
             
             % Identify "Eye" Channel Headers
             eyeChannelHeaderIndex = find(contains(tabularData,"Eye"));
@@ -27,10 +27,15 @@ classdef dataChannels
                 end
             end
 
-            % Create Calculated Data Channels
-            calculatedChannels = calculatedDataChannels.calculateDataChannels(eyeChannelNames,channelData,dataEntryVariableName);
-            % eyeChannelNames = vertcat(eyeChannelNames,["Binocular Horizontal";"Binocular Vertical";"Binocular Pupil"]);
-
+            % Short Circuit if Accommodation ONLY
+            if(~plusOptixBoolean)
+                % Create Calculated Data Channels
+                calculatedChannels = calculatedDataChannels.calculateDataChannels(eyeChannelNames,channelData,dataEntryVariableName);
+                % eyeChannelNames = vertcat(eyeChannelNames,["Binocular Horizontal";"Binocular Vertical";"Binocular Pupil"]);
+            else
+                calculatedChannels = channelData;
+            end
+    
             % Create Table with Data Channel Headers as VariableNames 
             tabularDataChannels = array2table(calculatedChannels,"VariableNames",eyeChannelNames);
 
